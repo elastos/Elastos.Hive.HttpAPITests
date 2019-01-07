@@ -14,6 +14,7 @@ ipfs_config_path = os.path.join(config_path, "ipfs.conf")
 data_path = os.path.join(pro_dir, "testFiles")
 ipfs_data_path = os.path.join(data_path, "data.conf")
 
+
 class ReadConfig:
     def __init__(self):
         self.conf_content = ConfigParser.ConfigParser()
@@ -40,3 +41,8 @@ class ReadData:
     def get_id(self, name):
         value = self.data_content.get("ID", name)
         return value
+
+    def get_common(self, name):
+        value = self.data_content.get("common", name)
+        return value
+

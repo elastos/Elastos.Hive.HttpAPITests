@@ -11,7 +11,6 @@ import HTMLTestRunner
 import os
 from function.ela_log import MyLog
 
-
 caseListFile = "run_case_list.txt"
 log = MyLog.get_log()
 logger = log.get_logger()

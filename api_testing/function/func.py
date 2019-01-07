@@ -1,4 +1,4 @@
-import requests
+import requests, os
 import subprocess
 from requests_toolbelt.multipart import encoder
 import read_conf as readConfig
@@ -129,3 +129,33 @@ class ConfigHttp:
         logger.info("Expect body keys: %s" % expect_body.keys())
         res = cmp(res_body.keys(), expect_body.keys())
         return res
+
+    def curl_get_code(self, baseurl, port, api):
+        o, e = self.curl_cmd("curl  --connect-timeout 10 -m 10 -o /dev/null -s -w %{http_code} " + baseurl + ":" + port + api)
+        return (o,e)
+
+    def curl_get_body(self, baseurl, port, api):
+        o, e = self.curl_cmd("curl  --connect-timeout 10 -m 10 " + baseurl + ":" + port + api)
+        return (o,e)
+
+    def curl_post_code(self, baseurl, port, api, parm_str = ""):
+        if parm_str == "":
+            o, e = self.curl_cmd("curl -X POST  --connect-timeout 10 -m 10 -o /dev/null -s -w %{http_code} " + baseurl \
+                                 + ":" + port + api)
+        else:
+            o, e = self.curl_cmd("curl -X POST --connect-timeout 10 -m 10 -o /dev/null -s -w %{http_code} " + baseurl \
+                                 + ":" + port + api + " -d %s" % parm_str)
+        return (o, e)
+
+    @staticmethod
+    def wrap_case(func):
+        def run(*argv):
+            logger.info("-" * 25)
+            logger.info("[%s] TEST CASE: [%s]" % (os.path.basename(__file__), func.__name__))
+            logger.info("-" * 25)
+            if argv:
+                ret = func(*argv)
+            else:
+                ret = func()
+            return ret
+        return run

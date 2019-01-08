@@ -46,3 +46,6 @@ class ReadData:
         value = self.data_content.get("common", name)
         return value
 
+    def get_peers(self, name):
+        value = self.data_content.get("PEERS", name)
+        return value

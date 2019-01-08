@@ -64,21 +64,14 @@ class Version(unittest.TestCase):
 
     def __init__(self, methodName='runTest'):
         self.f = ConfigHttp()
+        self.c = CaseMethod(api, normal_response_body)
         unittest.TestCase.__init__(self, methodName)
 
     @ConfigHttp.wrap_case
     def test_normal_get(self):
-        o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
-        logger.info(o)
-        logger.info(e)
-        self.assertEqual(e, normal_response_code)
-        o, e = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api)
-        logger.info(o)
-        logger.info(e)
-        res_dict = json.loads(e)
-        expect_dict = json.loads(normal_response_body)
-        res = self.f.check_body(res_dict, expect_dict)
-        self.assertEqual(res, 0)
+        code, bcheck = self.c.get_check()
+        self.assertEqual(code, normal_response_code)
+        self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_normal_post_404(self):
@@ -91,28 +84,15 @@ class Version(unittest.TestCase):
     def test_with_number_get(self):
         number_cases_r = number_param_r.split(",")
         for num in number_cases_r:
-            api_str = "%s?%s" % (api, num)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            self.assertEqual(e, normal_response_code)
-
-            o, e = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            res_dict = json.loads(e)
-            expect_dict = json.loads(normal_response_body)
-            res = self.f.check_body(res_dict, expect_dict)
-            self.assertEqual(res, 0)
+            code, bcheck = self.c.get_check(num)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
         number_cases_e = number_param_e.split(",")
         for num in number_cases_e:
-            api_str = "%s?%s" % (api, num)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            # self.assertEqual(e, abnormal_response_code)
-            self.assertEqual(e, normal_response_code)
+            code, bcheck = self.c.get_check(num)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_with_number_post_404(self):
@@ -128,28 +108,15 @@ class Version(unittest.TestCase):
     def test_with_commit_get(self):
         commit_cases_r = commit_param_r.split(",")
         for commit in commit_cases_r:
-            api_str = "%s?%s" % (api, commit)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            self.assertEqual(e, normal_response_code)
-
-            o, e = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            res_dict = json.loads(e)
-            expect_dict = json.loads(normal_response_body)
-            res = self.f.check_body(res_dict, expect_dict)
-            self.assertEqual(res, 0)
+            code, bcheck = self.c.get_check(commit)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
         commit_cases_e = commit_param_e.split(",")
         for commit in commit_cases_e:
-            api_str = "%s?%s" % (api, commit)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            # self.assertEqual(e, abnormal_response_code)
-            self.assertEqual(e, normal_response_code)
+            code, bcheck = self.c.get_check(commit)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_with_commit_post_404(self):
@@ -165,28 +132,15 @@ class Version(unittest.TestCase):
     def test_with_repo_get(self):
         repo_cases_r = repo_param_r.split(",")
         for repo in repo_cases_r:
-            api_str = "%s?%s" % (api, repo)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            self.assertEqual(e, normal_response_code)
-
-            o, e = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            res_dict = json.loads(e)
-            expect_dict = json.loads(normal_response_body)
-            res = self.f.check_body(res_dict, expect_dict)
-            self.assertEqual(res, 0)
+            code, bcheck = self.c.get_check(repo)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
         repo_cases_e = repo_param_e.split(",")
         for repo in repo_cases_e:
-            api_str = "%s?%s" % (api, repo)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            # self.assertEqual(e, abnormal_response_code)
-            self.assertEqual(e, normal_response_code)
+            code, bcheck = self.c.get_check(repo)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_with_repo_post_404(self):
@@ -202,28 +156,15 @@ class Version(unittest.TestCase):
     def test_with_all_get(self):
         all_cases_r = all_param_r.split(",")
         for all in all_cases_r:
-            api_str = "%s?%s" % (api, all)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            self.assertEqual(e, normal_response_code)
-
-            o, e = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            res_dict = json.loads(e)
-            expect_dict = json.loads(normal_response_body)
-            res = self.f.check_body(res_dict, expect_dict)
-            self.assertEqual(res, 0)
+            code, bcheck = self.c.get_check(all)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
         all_cases_e = all_param_e.split(",")
         for all in all_cases_e:
-            api_str = "%s?%s" % (api, all)
-            o, e = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_str)
-            logger.info(o)
-            logger.info(e)
-            # self.assertEqual(e, abnormal_response_code)
-            self.assertEqual(e, normal_response_code)
+            code, bcheck = self.c.get_check(all)
+            self.assertEqual(code, normal_response_code)
+            self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_with_all_post_404(self):

@@ -2,8 +2,9 @@
 """
 __title__ = ''
 __author__ = 'suxx'
-__mtime__ = '2019/1/4'
+__mtime__ = '2019/1/7'
 """
+
 import read_conf
 import unittest,sys,json
 sys.path.append("../")
@@ -19,36 +20,33 @@ ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_port")
 
 b = read_conf.ReadData()
-api = b.get_id("api")
+
 normal_response_code = b.get_common("normal_response_code")
 not_found_code = b.get_common("not_found_code")
 verbose_param_r = b.get_common("verbose_param_r")
 verbose_param_e = b.get_common("verbose_param_e")
 
-normal_response_body = b.get_id("normal_response_body")
+api = b.get_peers("api")
+normal_response_body = b.get_peers("normal_response_body")
 
 
 
-class Id(unittest.TestCase):
+class Peers(unittest.TestCase):
     '''
-    Show the cluster peers and its daemon information
+    List the cluster servers with open connections.
 
-    Arguments
-
+    METHOD:	GET Arguments
     Arguments	Type	Required	Description
-    verbose	bool	no	display all extra information.
-    HTTP Response
-
+    verbose	bool	no	display all extra information. HTTP Response
     Argument	Type	Required	Description
     http error	integer	yes	error code.
     http body	Json	no	Json string is following
     On success, the call to this endpoint will return with 200 and the following body:
 
     {
-          "id": "<NodeId>",
-          "peers": [
-                  "/ip4/104.236.176.52/tcp/4001",
-                  "/ip4/104.236.176.52/tcp/4001"
+          "data": [
+            "/ip4/104.236.176.52/tcp/4001",
+            "/ip4/104.236.176.52/tcp/4001"
           ]
     }
     '''
@@ -63,14 +61,6 @@ class Id(unittest.TestCase):
         code, bcheck = self.c.get_check()
         self.assertEqual(code, normal_response_code)
         self.assertEqual(bcheck, 0)
-
-    @ConfigHttp.wrap_case
-    def test_normal_post_404(self):
-        # Check code 404
-        o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
-        logger.info(o)
-        logger.info(e)
-        self.assertEqual(e, not_found_code)
 
     @ConfigHttp.wrap_case
     def test_with_verbose_get(self):
@@ -89,6 +79,7 @@ class Id(unittest.TestCase):
 
 # if __name__ == '__main__':
 #     suite = unittest.TestSuite()
-#     suite.addTest(Id("test_normal_get"))
+#     suite.addTest(Peers("test_with_verbose_get"))
 #     runner = unittest.TextTestRunner()
 #     runner.run(suite)
+

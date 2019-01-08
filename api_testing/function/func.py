@@ -1,4 +1,4 @@
-import requests, os
+import requests, os, json
 import subprocess
 from requests_toolbelt.multipart import encoder
 import read_conf as readConfig
@@ -78,17 +78,18 @@ class ConfigHttp:
             # response.raise_for_status()
             return response
         except requests.exceptions.ConnectTimeout:
-            self.logger.error("Time out!")
+            self.logger.error("Get operation time out!")
             return None
 
     # defined http post method
     def post(self):
         try:
-            response = requests.post(self.url, headers=self.headers, data=self.data, files=self.files, timeout=float(timeout))
+            response = requests.post(self.url, headers=self.headers, data=self.data, files=self.files,
+                                     timeout=float(timeout))
             # response.raise_for_status()
             return response
         except requests.exceptions.ConnectTimeout:
-            self.logger.error("Time out!")
+            self.logger.error("Post operation time out!")
             return None
 
     def curl_cmd(self, cmd):
@@ -98,7 +99,7 @@ class ConfigHttp:
             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = p.communicate()
             return err, out
-        except BaseException:
+        except subprocess.CalledProcessError:
             self.logger.error("Subprocess error!")
             return None
 
@@ -130,21 +131,22 @@ class ConfigHttp:
         res = cmp(res_body.keys(), expect_body.keys())
         return res
 
-    def curl_get_code(self, baseurl, port, api):
-        o, e = self.curl_cmd("curl  --connect-timeout 10 -m 10 -o /dev/null -s -w %{http_code} " + baseurl + ":" + port + api)
+    def curl_get_code(self, baseurl, port, api, timeout = '10'):
+        o, e = self.curl_cmd("curl --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} " + baseurl\
+                             + ":" + port + api)
         return (o,e)
 
-    def curl_get_body(self, baseurl, port, api):
-        o, e = self.curl_cmd("curl  --connect-timeout 10 -m 10 " + baseurl + ":" + port + api)
+    def curl_get_body(self, baseurl, port, api, timeout = '10'):
+        o, e = self.curl_cmd("curl --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
         return (o,e)
 
     def curl_post_code(self, baseurl, port, api, parm_str = ""):
         if parm_str == "":
-            o, e = self.curl_cmd("curl -X POST  --connect-timeout 10 -m 10 -o /dev/null -s -w %{http_code} " + baseurl \
-                                 + ":" + port + api)
+            o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
+                                 + baseurl + ":" + port + api)
         else:
-            o, e = self.curl_cmd("curl -X POST --connect-timeout 10 -m 10 -o /dev/null -s -w %{http_code} " + baseurl \
-                                 + ":" + port + api + " -d %s" % parm_str)
+            o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
+                                 + baseurl + ":" + port + api + " -d %s" % parm_str)
         return (o, e)
 
     @staticmethod
@@ -159,3 +161,35 @@ class ConfigHttp:
                 ret = func()
             return ret
         return run
+
+
+class CaseMethod:
+    def __init__(self, api, normal_response_body):
+        self.log = Log.get_log()
+        self.logger = self.log.get_logger()
+        self.headers = {}
+        self.params = None
+        self.data = {}
+        self.url = None
+        self.files = {}
+        self.f = ConfigHttp()
+        self.api = api
+        self.normal_response_body = normal_response_body
+
+    def get_check(self, parm_str=""):
+        o, code = self.f.curl_get_code(host, port, self.api + "?" + parm_str, timeout)
+        logger.info(o)
+        logger.info(code)
+
+        o, body = self.f.curl_get_body(host, port, self.api + "?" + parm_str, timeout)
+        logger.info(o)
+        logger.info(body)
+        res = json.loads(body)
+        if isinstance(res, list):
+            res_dict = res[0]
+        else:
+            res_dict = res
+        expect_dict = json.loads(self.normal_response_body)
+        res = self.f.check_body(res_dict, expect_dict)
+        return code, res
+

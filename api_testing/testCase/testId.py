@@ -28,7 +28,6 @@ verbose_param_e = b.get_common("verbose_param_e")
 normal_response_body = b.get_id("normal_response_body")
 
 
-
 class Id(unittest.TestCase):
     '''
     Show the cluster peers and its daemon information
@@ -65,6 +64,15 @@ class Id(unittest.TestCase):
         self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
+    def test_error_api_get(self):
+        f = ConfigHttp()
+        temp_api = api * 2
+        o, e = f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(o)
+        logger.info(e)
+        self.assertEqual(e, not_found_code)
+
+    @ConfigHttp.wrap_case
     def test_normal_post_404(self):
         # Check code 404
         o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
@@ -86,6 +94,11 @@ class Id(unittest.TestCase):
             self.assertEqual(code, normal_response_code)
             self.assertEqual(bcheck, 0)
 
+    @ConfigHttp.wrap_case
+    def test_with_error_param_get(self):
+        code, bcheck = self.c.get_check("verbos=1")
+        self.assertEqual(code, normal_response_code)
+        self.assertEqual(bcheck, 0)
 
 # if __name__ == '__main__':
 #     suite = unittest.TestSuite()

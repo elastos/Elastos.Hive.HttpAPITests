@@ -597,6 +597,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET and POST without required argument.
      - 400 code.
@@ -630,6 +634,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET and POST without required argument.
      - 400 code.
@@ -654,6 +662,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET without required argument.
      - 200 code. Null body.
@@ -686,6 +698,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET without required argument.
      - 200 code. Eg: {"Entries":[{"Name":"suxx","Type":0,"Size":0,"Hash":""},{"Name":"suxx2","Type":0,"Size":0,"Hash":""}]}
@@ -722,6 +738,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET without required argument.
      - 400 code.
@@ -754,6 +774,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET without required argument.
      - 400 code.
@@ -791,6 +815,10 @@
    :widths: 10 30 30 10
    :header-rows: 1
 
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
    * - 1
      - GET without required argument.
      - 400 code.
@@ -800,4 +828,66 @@
      -
      -
 
+**TEST CASE: /version**
 
+`Descriptions:`
+    Version information.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - GET and POST without any argument.
+     - 200 code. Body correct.
+     - A
+   * - 2
+     - GET and POST with "number" correct argument.
+     -
+     - A
+   * - 3
+     - GET and POST with "number" incorrect argument.
+     -
+     - A
+   * - 4
+     - GET and POST with "commit" correct argument.
+     -
+     - A
+   * - 5
+     - GET and POST with "commit" incorrect argument.
+     -
+     - A
+   * - 6
+     - GET and POST with "repo" correct argument.
+     -
+     - A
+   * - 7
+     - GET and POST with "repo" incorrect argument.
+     -
+     - A
+   * - 8
+     - GET and POST with "all" correct argument.
+     -
+     - A
+   * - 9
+     - GET and POST with "all" incorrect argument.
+     -
+     - A
+   * - 8
+     - GET and POST with joint correct argument.
+     -
+     - A
+   * - 9
+     - GET and POST with joint incorrect argument.
+     -
+     - A

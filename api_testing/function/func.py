@@ -121,7 +121,7 @@ class ConfigHttp:
             try:
                 p_l[1] = "\"%s\"" % p_l[1]
             except IndexError:
-                p_1[1] = ""
+                p_l[1] = ""
             res += p_l[0] + ":" + p_l[1] + ","
         return res[0:-1]
 

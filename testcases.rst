@@ -828,6 +828,178 @@
      -
      -
 
+
+**TEST CASE: /api/v0/files/rm**
+
+`Descriptions:`
+    Remove a file.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - GET without required argument.
+     - 400 code.
+     - A
+   * - 2
+     - GET method rm a directory.
+     - 500 code. {"Message":"/suxx is a directory, use -r to remove directories","Code":0,"Type":"error"}
+     - A
+   * - 3
+     - GET rm an un-exist file.
+     - 500 code. {"Message":"file does not exist","Code":0,"Type":"error"}
+     - A
+
+
+**TEST CASE: /api/v0/files/stat**
+
+`Descriptions:`
+    Display file status.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+    Make some directory.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - GET without required argument.
+     - 400 code.
+     - A
+   * - 2
+     - GET with "path"(arg) with error directory value.
+     - 500 code.{"Message":"file does not exist","Code":0,"Type":"error"}
+     - A
+   * - 3
+     - GET with "path"(arg) with correct directory value.
+     - 200 coed. Body correct.
+     - A
+   * - 4
+     - GET with "format" arguments and value.
+     - 200 code.
+     - M
+
+**TEST CASE: /api/v0/files/write**
+
+`Descriptions:`
+    Write to a mutable file in a given filesystem.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - GET without required argument.
+     - 400 code.
+     - A
+   * - 2
+     -
+     -
+     -
+
+**TEST CASE: /api/v0/name/publish**
+
+`Descriptions:`
+    Publish user context file or directory to public.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     -
+     -
+     - A
+
+**TEST CASE: /api/v0/message/pub**
+
+`Descriptions:`
+    Publish a message to a given pubsub topic.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     -
+     -
+     - A
+
+**TEST CASE: /api/v0/message/sub**
+
+`Descriptions:`
+    Subscribe to message to a given topic.
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     -
+     -
+     - A
+
+
 **TEST CASE: /version**
 
 `Descriptions:`

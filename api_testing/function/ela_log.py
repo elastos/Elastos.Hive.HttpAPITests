@@ -10,6 +10,7 @@ import threading
 sys.path.append("../")
 import read_conf
 
+
 class Log:
     def __init__(self):
         self.pro_dir = read_conf.pro_dir

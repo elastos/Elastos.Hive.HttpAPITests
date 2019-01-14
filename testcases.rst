@@ -63,7 +63,7 @@
      - A
    * - 4
      - Repeat step 1, 2, 3 on another node.
-     - Result 1,2, 3.
+     - Result 1,2,3.
      - A
 
 **TEST CASE: /peers/{peerID}**

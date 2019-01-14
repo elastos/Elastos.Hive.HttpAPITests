@@ -93,7 +93,6 @@ class ConfigHttp:
             return None
 
     def curl_cmd(self, cmd):
-        print "CURL: %s" % cmd
         self.logger.info(cmd)
         try:
             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -149,6 +148,27 @@ class ConfigHttp:
                                  + baseurl + ":" + port + api + " -d %s" % parm_str)
         return (o, e)
 
+    def list_conf_case(self, case_str, sp = ","):
+        '''
+        In put case string. Return cases list.
+        cases   =   ?XXX=1,
+                    ?verbose=1&xxx=1,
+                    ?xxx=xxx&verbose=0
+        return ["?XXX=1","?verbose=1&xxx=1","?xxx=xxx&verbose=0"]
+        :param case_str:
+        :return ["?XXX=1","?verbose=1&xxx=1","?xxx=xxx&verbose=0"]:
+        '''
+
+        p_c = []
+        p_c_list = case_str.split(sp)
+        for p in p_c_list:
+            if p != "":
+                p_c.append(p.strip())
+            else:
+                pass
+
+        return p_c
+
     @staticmethod
     def wrap_case(func):
         def run(*argv):
@@ -178,15 +198,21 @@ class CaseMethod:
 
     def get_check(self, parm_str=""):
         o, code = self.f.curl_get_code(host, port, self.api + "?" + parm_str, timeout)
-        logger.info(o)
-        logger.info(code)
-
+        logger.info("~~~~~GET CODE~~~~~~~")
+        logger.info("[ERR_OR_INFO]:" + o)
+        logger.info("[OUTPUT]:" + code)
+        logger.info("~~~~~~~~~~~~~~~~~~~~\n")
         o, body = self.f.curl_get_body(host, port, self.api + "?" + parm_str, timeout)
-        logger.info(o)
-        logger.info(body)
-        res = json.loads(body)
+        logger.info("~~~~~GET BODY~~~~~~~")
+        logger.info("[ERR_OR_INFO]:" + o)
+        logger.info("[OUTPUT]:" + body)
+        logger.info("~~~~~~~~~~~~~~~~~~~~\n")
+        res = json.loads(body.strip())
         if isinstance(res, list):
-            res_dict = res[0]
+            if res != []:
+                res_dict = res[0]
+            else:
+                res_dict = {}
         else:
             res_dict = res
         expect_dict = json.loads(self.normal_response_body)

@@ -1,4 +1,6 @@
 #testKeyList
 #testVersion
-testId
+#testId
 #testPeers
+#testPeersPid
+testPins

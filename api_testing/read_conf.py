@@ -49,3 +49,11 @@ class ReadData:
     def get_peers(self, name):
         value = self.data_content.get("PEERS", name)
         return value
+
+    def get_peers_pid(self, name):
+        value = self.data_content.get("PEERS_PID", name)
+        return value
+
+    def get_pins(self, name):
+        value = self.data_content.get("PINS", name)
+        return value

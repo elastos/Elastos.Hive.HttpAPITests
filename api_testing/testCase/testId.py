@@ -4,9 +4,10 @@ __title__ = ''
 __author__ = 'suxx'
 __mtime__ = '2019/1/4'
 """
-import read_conf
-import unittest,sys,json
+
+import unittest,sys
 sys.path.append("../")
+import read_conf
 from function.func import *
 from function.ela_log import MyLog
 

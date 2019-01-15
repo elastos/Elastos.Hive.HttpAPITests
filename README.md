@@ -31,7 +31,12 @@ HTTP.API Testing Framework
 
 # Method
 
-* Setup python 2/3 environment on OS. (HTMLRunner, requests_toolbelt, requests)
-* Config run_case_list.txt if the line start with "#", framework will not run the case.
+* Setup python 2/3 environment on OS.
+* pip install html-testrunner
+ (If you can not import HTMTTestRunner, can download HTMLTestRunner.py then put into directory such as python27/lib)
+* pip install requests
+* pip install requests-toolbelt
+* If you run this framework on windows OS, you should setup "curl" command. Download curl from https://curl.haxx.se/windows/
+* Config run_case_list.txt if the line start with "#", framework will not run the cases.
 * Run command : python http_api.py
 * Check result/<data_directory>

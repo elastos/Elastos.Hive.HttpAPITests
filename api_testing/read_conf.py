@@ -57,3 +57,11 @@ class ReadData:
     def get_pins(self, name):
         value = self.data_content.get("PINS", name)
         return value
+
+    def get_pins_cid_sync(self, name):
+        value = self.data_content.get("PINS_CID_SYNC", name)
+        return value
+
+    def get_pins_recover(self,name):
+        value = self.data_content.get("PINS_RECOVER", name)
+        return value

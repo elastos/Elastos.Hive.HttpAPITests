@@ -5,7 +5,7 @@ __author__ = 'suxx'
 __mtime__ = '2019/1/14'
 """
 
-import unittest,sys,json
+import unittest, sys, json
 sys.path.append("../")
 import read_conf
 from function.func import *

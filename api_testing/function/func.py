@@ -139,7 +139,7 @@ class ConfigHttp:
         o, e = self.curl_cmd("curl --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
         return (o,e)
 
-    def curl_post_code(self, baseurl, port, api, parm_str = ""):
+    def curl_post_code(self, baseurl, port, api, parm_str = "", timeout = '10'):
         if parm_str == "":
             o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
                                  + baseurl + ":" + port + api)
@@ -147,6 +147,14 @@ class ConfigHttp:
             o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
                                  + baseurl + ":" + port + api + " -d %s" % parm_str)
         return (o, e)
+
+    def curl_post_body(self, baseurl, port, api, parm_str = "", timeout = '10'):
+        if parm_str != "":
+            o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api + " -d %s" % parm_str)
+        else:
+            o, e = self.curl_cmd(
+                "curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
+        return (o,e)
 
     def list_conf_case(self, case_str, sp = ","):
         '''
@@ -204,6 +212,29 @@ class CaseMethod:
         logger.info("~~~~~~~~~~~~~~~~~~~~\n")
         o, body = self.f.curl_get_body(host, port, self.api + "?" + parm_str, timeout)
         logger.info("~~~~~GET BODY~~~~~~~")
+        logger.info("[ERR_OR_INFO]:" + o)
+        logger.info("[OUTPUT]:" + body)
+        logger.info("~~~~~~~~~~~~~~~~~~~~\n")
+        res = json.loads(body.strip())
+        if isinstance(res, list):
+            if res != []:
+                res_dict = res[0]
+            else:
+                res_dict = {}
+        else:
+            res_dict = res
+        expect_dict = json.loads(self.normal_response_body)
+        res = self.f.check_body(res_dict, expect_dict)
+        return code, res
+
+    def post_check(self, parm_str=""):
+        o, code = self.f.curl_post_code(host, port, self.api, parm_str, timeout)
+        logger.info("~~~~~POST CODE~~~~~~~")
+        logger.info("[ERR_OR_INFO]:" + o)
+        logger.info("[OUTPUT]:" + code)
+        logger.info("~~~~~~~~~~~~~~~~~~~~\n")
+        o, body = self.f.curl_post_body(host, port, self.api, parm_str, timeout)
+        logger.info("~~~~~POST BODY~~~~~~~")
         logger.info("[ERR_OR_INFO]:" + o)
         logger.info("[OUTPUT]:" + body)
         logger.info("~~~~~~~~~~~~~~~~~~~~\n")

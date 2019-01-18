@@ -3,4 +3,7 @@
 #testId
 #testPeers
 #testPeersPid
-testPins
+#testPins
+#testPinsCidSync
+#testPinsCidrRecover
+testPinsRecover

@@ -43,10 +43,10 @@ class Srequests:
 
 
 class ConfigHttp:
-    def __init__(self):
+    def __init__(self, portx = "ipfs_master_api_port"):
         global host, port, timeout
         host = localReadConfig.get_ipfs_cluster("ipfs_master_api_baseurl")
-        port = localReadConfig.get_ipfs_cluster("ipfs_master_api_port")
+        port = localReadConfig.get_ipfs_cluster(portx)
         timeout = localReadConfig.get_ipfs_cluster("ipfs_master_api_timeout")
         self.log = Log.get_log()
         self.logger = self.log.get_logger()
@@ -191,8 +191,14 @@ class ConfigHttp:
         return run
 
 
-class CaseMethod:
-    def __init__(self, api, normal_response_body):
+class Wrappers:
+    def __init__(self, portx = "ipfs_master_api_endpoint_port"):
+        global host, port, timeout
+        host = localReadConfig.get_ipfs_cluster("ipfs_master_api_baseurl")
+        logger.info(portx)
+        port = localReadConfig.get_ipfs_cluster(portx)
+        logger.info(port)
+        timeout = localReadConfig.get_ipfs_cluster("ipfs_master_api_timeout")
         self.log = Log.get_log()
         self.logger = self.log.get_logger()
         self.headers = {}
@@ -200,7 +206,31 @@ class CaseMethod:
         self.data = {}
         self.url = None
         self.files = {}
-        self.f = ConfigHttp()
+
+    @staticmethod
+    def wrap_case(func):
+        def run(*argv):
+            logger.info("#" * 25)
+            logger.info("[%s] TEST CASE: [%s]" % (os.path.basename(__file__), func.__name__))
+            logger.info("#" * 25)
+            if argv:
+                ret = func(*argv)
+            else:
+                ret = func()
+            return ret
+        return run
+
+
+class CaseMethod:
+    def __init__(self, api, normal_response_body, portx = "ipfs_master_api_port"):
+        self.log = Log.get_log()
+        self.logger = self.log.get_logger()
+        self.headers = {}
+        self.params = None
+        self.data = {}
+        self.url = None
+        self.files = {}
+        self.f = ConfigHttp(portx)
         self.api = api
         self.normal_response_body = normal_response_body
 

@@ -62,6 +62,14 @@ class ReadData:
         value = self.data_content.get("PINS_CID_SYNC", name)
         return value
 
-    def get_pins_recover(self,name):
+    def get_pins_recover(self, name):
         value = self.data_content.get("PINS_RECOVER", name)
+        return value
+
+    def get_api_v0_uid_new(self, name):
+        value = self.data_content.get("API_V0_UID_NEW", name)
+        return value
+
+    def get_api_v0_uid_login(self, name):
+        value = self.data_content.get("API_V0_UID_LOGIN", name)
         return value

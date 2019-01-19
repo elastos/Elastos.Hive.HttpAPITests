@@ -6,4 +6,6 @@
 #testPins
 #testPinsCidSync
 #testPinsCidrRecover
-testPinsRecover
+#testPinsRecover
+#testApiV0UidNew
+testApiV0UidLogin

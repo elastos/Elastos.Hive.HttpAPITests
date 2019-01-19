@@ -262,9 +262,17 @@
      - Expect
      - Auto/Manual
    * - 1
-     -
-     -
-     -
+     - GET the interface.
+     - 200 code and body correct.
+     - A
+   * - 2
+     - GET the interface again.
+     - 200 code and a new id and peerid.
+     - A
+   * - 3
+     - GET the interface with extra argument.
+     - 200 code and new uid.
+     - A
 
 **TEST CASE: /api/v0/uid/login**
 
@@ -273,6 +281,7 @@
 
 `Preparation:`
     IPFS-cluster with some nodes.
+    Generate an uid.
 
 `Steps:`
 
@@ -285,9 +294,21 @@
      - Expect
      - Auto/Manual
    * - 1
-     -
-     -
-     -
+     - GET without any uid value.
+     - 500 code and body correct. {"Message":"error reading request: /api/v0/uid/login"}
+     - A
+   * - 2
+     - GET with error uid value.
+     - 500 code and body correct. {"Message":"IPFS unsuccessful: 500: no key named xxxx was found"}
+     - A
+   * - 3
+     - GET with error argument.
+     - 500 code and body correct. {"Message":"error reading request: /api/v0/uid/login?uidd=xxxx"}
+     - A
+   * - 4
+     - GET with correct uid.
+     - 200 code and body correct.
+     - A
 
 **TEST CASE: /api/v0/file/pin/add**
 

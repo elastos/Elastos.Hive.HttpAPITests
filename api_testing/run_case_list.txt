@@ -8,4 +8,5 @@
 #testPinsCidrRecover
 #testPinsRecover
 #testApiV0UidNew
-testApiV0UidLogin
+#testApiV0UidLogin
+testApiV0FilePinAdd

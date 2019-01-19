@@ -73,3 +73,7 @@ class ReadData:
     def get_api_v0_uid_login(self, name):
         value = self.data_content.get("API_V0_UID_LOGIN", name)
         return value
+
+    def get_api_v0_file_pin_add(self, name):
+        value = self.data_content.get("API_V0_FILE_PIN_ADD", name)
+        return value

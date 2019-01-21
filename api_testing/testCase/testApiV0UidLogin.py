@@ -96,3 +96,4 @@ class ApiV0UidLogin(unittest.TestCase):
          a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
          logger.info(b1)
          self.assertEqual(b1, normal_response_code)
+

@@ -2,10 +2,10 @@
 """
 __title__ = ''
 __author__ = 'suxx'
-__mtime__ = '2019/1/19'
+__mtime__ = '2019/1/21'
 """
 
-import unittest, sys, json
+import unittest, sys, time, os, json
 sys.path.append("../")
 import read_conf
 from function.func import *
@@ -28,32 +28,24 @@ verbose_param_e = b.get_common("verbose_param_e")
 quiet_param_r = b.get_common("quiet_param_r")
 quiet_param_e = b.get_common("quiet_param_e")
 
-api = b.get_api_v0_file_pin_add("api")
-normal_response_body = b.get_api_v0_file_pin_add("normal_response_body")
-# cases_200 = b.get_api_v0_uid_new("200_code_cases")
+api = b.get_api_v0_pin_rm("api")
+normal_response_body = b.get_api_v0_pin_rm("normal_response_body")
+# types = b.get_api_v0_pin_rm("type")
+# cases_200 = b.get_api_v0_pin_rm("200_code_cases")
 
 
-class ApiV0FilePinAdd(unittest.TestCase):
+class ApiV0PinRm(unittest.TestCase):
     '''
-
-    Pin objects in the cluster
+    Remove pinned objects from the cluster.
 
     METHOD:	GET/POST Arguments
     Arguments	Type	Required	Description
     arg	string	yes	Path to object(s) to be pinned. Required: yes.
-    recursive	bool	yes	Recursively pin the object linked to by the specified object(s). Default: “true”.
-    progress	bool	no	Show progress. Default: "true" HTTP Response
+    recursive	bool	no	Recursively unpin the object linked to by the specified object(s). Default: “true”. HTTP Response
     Argument	Type	Required	Description
     http error	integer	yes	error code.
     http body	Json	no	Json string is following
     On success, the call to this endpoint will return with 200.
-
-    {
-          "Pins": [
-                  "<CID>"
-          ],
-          "Progress": "<int>"
-    }
     '''
 
     def __init__(self, methodName='runTest'):
@@ -68,8 +60,21 @@ class ApiV0FilePinAdd(unittest.TestCase):
         self.assertEqual(b1, internal_server_error)
 
     @Wrappers.wrap_case
+    def test_with_err_arg_get(self):
+        temp_api = api + "?arg=xxxx"
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, internal_server_error)
+
+    @Wrappers.wrap_case
     def test_with_arg_get(self):
-        a1, b1 = self.f.curl_cmd("curl -F file=@all_cases.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,ipfs_master_api_port))
+        current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        with open("temp.txt", "a") as f:
+            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        f.close()
+
+        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+                                                                             ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
         temp = "%s?arg=%s" % (api, Hash)

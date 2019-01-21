@@ -9,4 +9,6 @@
 #testPinsRecover
 #testApiV0UidNew
 #testApiV0UidLogin
-testApiV0FilePinAdd
+#testApiV0PinAdd#
+#testApiV0PinLs
+testApiV0PinRm

@@ -43,12 +43,12 @@ class PeersPid(unittest.TestCase):
 
     @ConfigHttp.wrap_case
     def test_no_peerid_delete(self):
-        code, bcheck = self.f.curl_cmd("curl -X DELETE %s:%s%s" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
+        code, bcheck = self.f.run_cmd("curl -X DELETE %s:%s%s" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
         self.assertEqual(bcheck.strip(), "404 page not found")
 
     @ConfigHttp.wrap_case
     def test_error_peerid_delete(self):
-        code, bcheck = self.f.curl_cmd("curl -X DELETE %s:%s%s/XXX" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
+        code, bcheck = self.f.run_cmd("curl -X DELETE %s:%s%s/XXX" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
         d = json.loads(bcheck)
         self.assertEqual(d["code"], 400)
 

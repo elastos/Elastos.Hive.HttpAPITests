@@ -179,7 +179,7 @@ class Version(unittest.TestCase):
     @ConfigHttp.wrap_case
     def test_with_combined_parameters_get(self):
         parm = combined_parameters.replace(",", "&")
-        o, e = self.f.curl_cmd("curl " + ipfs_master_api_baseurl + ":" \
+        o, e = self.f.run_cmd("curl " + ipfs_master_api_baseurl + ":" \
                           + ipfs_master_api_port + api + "?" + parm)
         logger.info(o)
         logger.info(e)
@@ -192,7 +192,7 @@ class Version(unittest.TestCase):
     def test_with_combined_parameters_post_404(self):
         parm = self.f.curl_post_str(combined_parameters)
 
-        o, e = self.f.curl_cmd("curl -X POST " + ipfs_master_api_baseurl + ":" \
+        o, e = self.f.run_cmd("curl -X POST " + ipfs_master_api_baseurl + ":" \
                           + ipfs_master_api_port + api + " -d '%s'" % parm)
         logger.info(o)
         logger.info(e)
@@ -202,13 +202,5 @@ class Version(unittest.TestCase):
 # if __name__ == '__main__':
 #     suite = unittest.TestSuite()
     # suite.addTest(Version("test_normal_get"))
-    # suite.addTest(Version("test_normal_post_404"))
-    # suite.addTest(Version("test_with_number_get"))
-    # suite.addTest(Version("test_with_number_post_404"))
-    # suite.addTest(Version("test_with_commit_get"))
-    # suite.addTest(Version("test_with_commit_post_404"))
-    # suite.addTest(Version("test_with_repo_get"))
-    # suite.addTest(Version("test_with_repo_post_404"))
-    # suite.addTest(Version("test_with_all_get"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)

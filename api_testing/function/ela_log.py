@@ -71,5 +71,6 @@ class MyLog(Log):
 
         return MyLog.log
 
+
 a = MyLog.get_log()
 print a.logPath

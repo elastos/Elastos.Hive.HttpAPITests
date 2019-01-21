@@ -74,6 +74,14 @@ class ReadData:
         value = self.data_content.get("API_V0_UID_LOGIN", name)
         return value
 
-    def get_api_v0_file_pin_add(self, name):
-        value = self.data_content.get("API_V0_FILE_PIN_ADD", name)
+    def get_api_v0_pin_add(self, name):
+        value = self.data_content.get("API_V0_PIN_ADD", name)
+        return value
+
+    def get_api_v0_pin_ls(self, name):
+        value = self.data_content.get("API_V0_PIN_LS", name)
+        return value
+
+    def get_api_v0_pin_rm(self, name):
+        value = self.data_content.get("API_V0_PIN_RM", name)
         return value

@@ -92,7 +92,7 @@ class ConfigHttp:
             self.logger.error("Post operation time out!")
             return None
 
-    def curl_cmd(self, cmd):
+    def run_cmd(self, cmd):
         self.logger.info(cmd)
         try:
             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -131,28 +131,28 @@ class ConfigHttp:
         return res
 
     def curl_get_code(self, baseurl, port, api, timeout = '10'):
-        o, e = self.curl_cmd("curl --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} " + baseurl\
+        o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} " + baseurl\
                              + ":" + port + api)
         return (o,e)
 
     def curl_get_body(self, baseurl, port, api, timeout = '10'):
-        o, e = self.curl_cmd("curl --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
+        o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
         return (o,e)
 
     def curl_post_code(self, baseurl, port, api, parm_str = "", timeout = '10'):
         if parm_str == "":
-            o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
+            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
                                  + baseurl + ":" + port + api)
         else:
-            o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
+            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
                                  + baseurl + ":" + port + api + " -d %s" % parm_str)
         return (o, e)
 
     def curl_post_body(self, baseurl, port, api, parm_str = "", timeout = '10'):
         if parm_str != "":
-            o, e = self.curl_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api + " -d %s" % parm_str)
+            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api + " -d %s" % parm_str)
         else:
-            o, e = self.curl_cmd(
+            o, e = self.run_cmd(
                 "curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
         return (o,e)
 
@@ -181,7 +181,7 @@ class ConfigHttp:
     def wrap_case(func):
         def run(*argv):
             logger.info("-" * 25)
-            logger.info("[%s] TEST CASE: [%s]" % (os.path.basename(__file__), func.__name__))
+            logger.info("TEST CASE: [%s]" % func.__name__)
             logger.info("-" * 25)
             if argv:
                 ret = func(*argv)
@@ -211,7 +211,7 @@ class Wrappers:
     def wrap_case(func):
         def run(*argv):
             logger.info("#" * 25)
-            logger.info("[%s] TEST CASE: [%s]" % (os.path.basename(__file__), func.__name__))
+            logger.info("TEST CASE: [%s]" % func.__name__)
             logger.info("#" * 25)
             if argv:
                 ret = func(*argv)

@@ -30,8 +30,6 @@ quiet_param_e = b.get_common("quiet_param_e")
 
 api = b.get_api_v0_pin_rm("api")
 normal_response_body = b.get_api_v0_pin_rm("normal_response_body")
-# types = b.get_api_v0_pin_rm("type")
-# cases_200 = b.get_api_v0_pin_rm("200_code_cases")
 
 
 class ApiV0PinRm(unittest.TestCase):
@@ -69,8 +67,8 @@ class ApiV0PinRm(unittest.TestCase):
     @Wrappers.wrap_case
     def test_with_arg_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        with open("temp.txt", "a") as f:
-            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
         a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
@@ -78,6 +76,69 @@ class ApiV0PinRm(unittest.TestCase):
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
         temp = "%s?arg=%s" % (api, Hash)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
+        logger.info(b1)
+        self.assertEqual(b1, normal_response_code)
+
+    @Wrappers.wrap_case
+    def test_with_unpin_arg_get(self):
+        current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        f.close()
+
+        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+                                                                             ipfs_master_api_port))
+        logger.info(b1)
+        Hash = json.loads(b1)["Hash"]
+        temp = "%s?arg=%s" % (api, Hash)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
+        logger.info(b1)
+        self.assertEqual(b1, normal_response_code)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
+        logger.info(b1)
+        self.assertEqual(b1, internal_server_error)
+
+    @Wrappers.wrap_case
+    def test_with_recursive_get(self):
+        current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        f.close()
+
+        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+                                                                             ipfs_master_api_port))
+        logger.info(b1)
+        Hash = json.loads(b1)["Hash"]
+        temp = "%s?arg=%s&recursive=yes" % (api, Hash)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
+        logger.info(b1)
+        self.assertEqual(b1, normal_response_code)
+
+        current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        f.close()
+
+        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+                                                                             ipfs_master_api_port))
+        logger.info(b1)
+        Hash = json.loads(b1)["Hash"]
+        temp = "%s?arg=%s&recursive=no" % (api, Hash)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
+        logger.info(b1)
+        self.assertEqual(b1, normal_response_code)
+
+        current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        f.close()
+
+        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+                                                                             ipfs_master_api_port))
+        logger.info(b1)
+        Hash = json.loads(b1)["Hash"]
+        temp = "%s?arg=%s&recursive=xxx" % (api, Hash)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
         logger.info(b1)
         self.assertEqual(b1, normal_response_code)

@@ -661,7 +661,7 @@
      - Auto/Manual
    * - 1
      - GET and POST without required argument.
-     - 400 code.
+     - 500 code. {"Message":"error reading request: /api/v0/files/cp"}
      - A
    * - 2
      -
@@ -689,15 +689,15 @@
      - Auto/Manual
    * - 1
      - GET without required argument.
-     - 200 code. Null body.
+     - 500 code. {"Message":"error reading request: /api/v0/files/flush"}
      - A
    * - 2
      - GET with an error uid string.
-     - 200 code. Null body.
+     - 500 code. {"Message":"IPFS unsuccessful: 500: file does not exist"}
      - A
    * - 3
      - GET with "path" string which not / and not exist.
-     - 200 code.
+     - 500 code. {"Message":"error reading request: /api/v0/files/flush?path=/"}
      - A
    * - 4
      - Make a directory and add a file. GET with path argument.
@@ -724,7 +724,7 @@
      - Expect
      - Auto/Manual
    * - 1
-     - GET without required argument.
+     - GET with required argument.
      - 200 code. Eg: {"Entries":[{"Name":"suxx","Type":0,"Size":0,"Hash":""},{"Name":"suxx2","Type":0,"Size":0,"Hash":""}]}
      - A
    * - 2
@@ -733,15 +733,15 @@
      - A
    * - 3
      - GET with "uid" but value is error.
-     - 200 code.
+     - 500 code. {"Message":"IPFS unsuccessful: 500: file does not exist"}
      - A
    * - 4
-     - POST with "path" argument. The value is an exist directory.
-     - 200 code.<!>
+     - GET only with "path" argument. The value is an exist directory.
+     - 500 code.
      - A
    * - 5
-     - POST with "path" the value is an un-exist directory.
-     - 200 code.<!>
+     - GET without any arguments.
+     - 500 code. {"Message":"error reading request: /api/v0/files/ls"}
      - A
 
 **TEST CASE: /api/v0/files/mkdir**
@@ -768,16 +768,20 @@
      - 400 code.
      - A
    * - 2
-     - GET with "path" argument only.
-     -
+     - GET with "path"(arg) argument only but string is error.
+     - 500 code. {"Message":"error reading request: /api/v0/files/mkdir?arg=dir1"}
      - A
    * - 3
      - GET with "uid" argument only.
-     -
+     - 200 code.
      - A
    * - 4
-     - POST with "path" and "uid" value.
-     -
+     - GET with correct "path" argument and value with uid.
+     - 200 code.
+     - A
+   * - 5
+     - GET with correct "path" argument and value with an exist uid.
+     - 500 code. {"Message":"IPFS unsuccessful: 500: file already exists"}
      - A
 
 **TEST CASE: /api/v0/files/mv**

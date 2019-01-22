@@ -102,6 +102,21 @@ class ConfigHttp:
             self.logger.error("Subprocess error!")
             return None
 
+    def get_interface(self, addr, aport, api):
+        self.logger.info("[GET API] curl %s:%s%s" % (addr, aport, api))
+        a1, b1 = self.run_cmd("curl %s:%s%s" % (addr, aport, api))
+        self.logger.info("[GET API E] %s" % a1)
+        self.logger.info("[GET API O] %s" % b1)
+        return a1, b1
+
+    def get_new_id(self, addr, aport, api="/api/v0/uid/new"):
+        a, b = self.get_interface(addr, aport, api)
+        if b is not None:
+            uid = json.loads(b)["UID"]
+        else:
+            uid = None
+        return uid
+
     def curl_post_str(self, strs):
         '''
         Covert
@@ -131,8 +146,9 @@ class ConfigHttp:
         return res
 
     def curl_get_code(self, baseurl, port, api, timeout = '10'):
-        o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} " + baseurl\
-                             + ":" + port + api)
+        # o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} " + baseurl\
+                             # + ":" + port + api)
+        o, e = self.run_cmd("curl --connect-timeout %s -m 10 -o /dev/null -s -w %%{http_code} \"%s:%s%s\"" % (timeout, baseurl, port, api))
         return (o,e)
 
     def curl_get_body(self, baseurl, port, api, timeout = '10'):

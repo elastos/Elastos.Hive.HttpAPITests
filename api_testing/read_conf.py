@@ -85,3 +85,28 @@ class ReadData:
     def get_api_v0_pin_rm(self, name):
         value = self.data_content.get("API_V0_PIN_RM", name)
         return value
+
+    def get_api_v0_file_ls(self, name):
+        value = self.data_content.get("API_V0_FILE_LS", name)
+        return value
+
+    def get_api_v0_files_cp(self, name):
+        value = self.data_content.get("API_V0_FILES_CP", name)
+        return value
+
+    def get_api_v0_files_mkdir(self, name):
+        value = self.data_content.get("API_V0_FILES_MKDIR", name)
+        return value
+
+    def get_api_v0_files_ls(self, name):
+        value = self.data_content.get("API_V0_FILES_LS", name)
+        return value
+
+    def get_api_v0_files_flush(self, name):
+        value = self.data_content.get("API_V0_FILES_FLUSH", name)
+        return value
+
+    def get_api_v0_files_cp(self, name):
+        value = self.data_content.get("API_V0_FILES_CP", name)
+        return value
+

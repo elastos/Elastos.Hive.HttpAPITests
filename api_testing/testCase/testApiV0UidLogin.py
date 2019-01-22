@@ -4,13 +4,6 @@ __title__ = ''
 __author__ = 'suxx'
 __mtime__ = '2019/1/19'
 """
-# -*- coding: utf-8 -*-
-"""
-__title__ = ''
-__author__ = 'suxx'
-__mtime__ = '2019/1/19'
-"""
-
 import unittest, sys, json
 sys.path.append("../")
 import read_conf

@@ -9,6 +9,11 @@
 #testPinsRecover
 #testApiV0UidNew
 #testApiV0UidLogin
-#testApiV0PinAdd#
+#testApiV0PinAdd
 #testApiV0PinLs
-testApiV0PinRm
+#testApiV0PinRm
+#testApiV0FileLs
+#testApiV0FilesCp
+#testApiV0FilesFlush
+#testApiV0FilesLs
+testApiV0FilesMkdir

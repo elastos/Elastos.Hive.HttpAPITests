@@ -102,8 +102,8 @@ class ApiV0PinAdd(unittest.TestCase):
     @Wrappers.wrap_case
     def test_with_recursive_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        with open("temp.txt","a") as f:
-            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        with open("temp.txt","w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
         a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
@@ -121,8 +121,8 @@ class ApiV0PinAdd(unittest.TestCase):
     @Wrappers.wrap_case
     def test_with_hidden_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        with open("temp.txt","a") as f:
-            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
         a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
@@ -141,8 +141,8 @@ class ApiV0PinAdd(unittest.TestCase):
     @Wrappers.wrap_case
     def test_with_joint_param_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        with open("temp.txt","a") as f:
-            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
         a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
@@ -156,8 +156,8 @@ class ApiV0PinAdd(unittest.TestCase):
     @Wrappers.wrap_case
     def test_with_joint_err_param_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        with open("temp.txt","a") as f:
-            f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
+        with open("temp.txt", "w") as f:
+            f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
         a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
@@ -168,17 +168,4 @@ class ApiV0PinAdd(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, normal_response_code)
 
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    suite.addTest(ApiV0PinAdd("test_no_arg_get"))
-    suite.addTest(ApiV0PinAdd("test_with_arg_get"))
-    suite.addTest(ApiV0PinAdd("test_with_inexistent_arg_get"))
-    suite.addTest(ApiV0PinAdd("test_with_error_arg_get"))
-    suite.addTest(ApiV0PinAdd("test_with_recursive_get"))
-    suite.addTest(ApiV0PinAdd("test_with_hidden_get"))
-    suite.addTest(ApiV0PinAdd("test_with_joint_param_get"))
-    suite.addTest(ApiV0PinAdd("test_with_joint_err_param_get"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
 

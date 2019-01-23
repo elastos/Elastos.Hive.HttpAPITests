@@ -11,7 +11,6 @@ import read_conf
 from function.func import *
 from function.ela_log import MyLog
 
-
 log = MyLog.get_log()
 logger = log.get_logger()
 

@@ -51,10 +51,3 @@ class PeersPid(unittest.TestCase):
         code, bcheck = self.f.run_cmd("curl -X DELETE %s:%s%s/XXX" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
         d = json.loads(bcheck)
         self.assertEqual(d["code"], 400)
-
-
-# if __name__ == '__main__':
-#     suite = unittest.TestSuite()
-#     suite.addTest(PeersPid("test_error_peerid_delete"))
-#     runner = unittest.TextTestRunner()
-#     runner.run(suite)

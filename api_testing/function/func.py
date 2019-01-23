@@ -3,6 +3,7 @@ import subprocess
 from requests_toolbelt.multipart import encoder
 import read_conf as readConfig
 from function.ela_log import MyLog as Log
+from random import Random
 localReadConfig = readConfig.ReadConfig()
 
 log = Log.get_log()
@@ -103,19 +104,44 @@ class ConfigHttp:
             return None
 
     def get_interface(self, addr, aport, api):
-        self.logger.info("[GET API] curl %s:%s%s" % (addr, aport, api))
-        a1, b1 = self.run_cmd("curl %s:%s%s" % (addr, aport, api))
-        self.logger.info("[GET API E] %s" % a1)
-        self.logger.info("[GET API O] %s" % b1)
+        self.logger.info("[GET API] curl \"%s:%s%s\"" % (addr, aport, api))
+        a1, b1 = self.run_cmd("curl \"%s:%s%s\"" % (addr, aport, api))
+        # self.logger.info("[GET API E] %s" % a1)
+        self.logger.info("[GET API OUTPUT] %s" % b1)
         return a1, b1
 
-    def get_new_id(self, addr, aport, api="/api/v0/uid/new"):
+    def get_new_id(self, addr, aport, api = "/api/v0/uid/new"):
         a, b = self.get_interface(addr, aport, api)
         if b is not None:
             uid = json.loads(b)["UID"]
         else:
             uid = None
         return uid
+
+    def get_files_mkdir(self, addr, aport, uid, paths, api = "/api/v0/files/mkdir"):
+
+        temp_api = "%s?path=%s&uid=%s" % (api, paths, uid)
+        self.logger.info("[Try to files mkdir] %s" % temp_api)
+        c = self.curl_get_code(addr, aport, temp_api)
+        return c
+
+    def get_files_path_hash(self, addr, aport, path, uid, api = "/api/v0/files/stat"):
+        temp_api = "%s?path=%s&uid=%s" % (api, path, uid)
+        a, b = self.get_interface(addr, aport, temp_api)
+        if b is not None:
+            path_hash = json.loads(b)["Hash"]
+        else:
+            path_hash = None
+        return path_hash
+
+    def random_str(self, randomlength=8):
+        strs = ''
+        chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+        length = len(chars) - 1
+        random = Random()
+        for i in range(randomlength):
+            strs += chars[random.randint(0, length)]
+        return strs
 
     def curl_post_str(self, strs):
         '''
@@ -146,10 +172,9 @@ class ConfigHttp:
         return res
 
     def curl_get_code(self, baseurl, port, api, timeout = '10'):
-        # o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} " + baseurl\
-                             # + ":" + port + api)
-        o, e = self.run_cmd("curl --connect-timeout %s -m 10 -o /dev/null -s -w %%{http_code} \"%s:%s%s\"" % (timeout, baseurl, port, api))
-        return (o,e)
+        o, e = self.run_cmd("curl --connect-timeout %s -m 10 -o /dev/null -s -w %%{http_code} \"%s:%s%s\""
+                            % (timeout, baseurl, port, api))
+        return o, e
 
     def curl_get_body(self, baseurl, port, api, timeout = '10'):
         o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)

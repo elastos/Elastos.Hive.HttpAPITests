@@ -2,7 +2,7 @@ testKeyList
 testVersion
 testId
 testPeers
-#testPeersPid
+testPeersPid
 testPins
 testPinsCidSync
 testPinsCidrRecover

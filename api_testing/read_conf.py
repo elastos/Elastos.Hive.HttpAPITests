@@ -106,7 +106,27 @@ class ReadData:
         value = self.data_content.get("API_V0_FILES_FLUSH", name)
         return value
 
-    def get_api_v0_files_cp(self, name):
-        value = self.data_content.get("API_V0_FILES_CP", name)
+    def get_api_v0_name_publish(self, name):
+        value = self.data_content.get("API_V0_NAME_PUBLISH", name)
+        return value
+
+    def get_api_v0_files_write(self, name):
+        value = self.data_content.get("API_V0_FILES_WRITE", name)
+        return value
+
+    def get_api_v0_files_stat(self, name):
+        value = self.data_content.get("API_V0_FILES_STAT", name)
+        return value
+
+    def get_api_v0_files_rm(self, name):
+        value = self.data_content.get("API_V0_FILES_RM", name)
+        return value
+
+    def get_api_v0_files_read(self, name):
+        value = self.data_content.get("API_V0_FILES_READ", name)
+        return value
+
+    def get_api_v0_files_mv(self, name):
+        value = self.data_content.get("API_V0_FILES_MV", name)
         return value
 

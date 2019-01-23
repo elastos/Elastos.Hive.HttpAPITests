@@ -11,7 +11,6 @@ import read_conf
 from function.func import *
 from function.ela_log import MyLog
 
-
 log = MyLog.get_log()
 logger = log.get_logger()
 
@@ -21,7 +20,6 @@ ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_port")
 
 b = read_conf.ReadData()
 api = b.get_id("api")
-normal_response_code = b.get_common("normal_response_code")
 not_found_code = b.get_common("not_found_code")
 verbose_param_r = b.get_common("verbose_param_r")
 verbose_param_e = b.get_common("verbose_param_e")
@@ -61,7 +59,7 @@ class Id(unittest.TestCase):
     @ConfigHttp.wrap_case
     def test_normal_get(self):
         code, bcheck = self.c.get_check()
-        self.assertEqual(code, normal_response_code)
+        self.assertEqual(code, "200")
         self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
@@ -71,38 +69,33 @@ class Id(unittest.TestCase):
         o, e = f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(o)
         logger.info(e)
-        self.assertEqual(e, not_found_code)
+        self.assertEqual(e, "404")
 
     @ConfigHttp.wrap_case
-    def test_normal_post_404(self):
+    def test_normal_post_405(self):
         # Check code 404
         o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(o)
         logger.info(e)
-        self.assertEqual(e, not_found_code)
+        self.assertEqual(e, "405")
 
     @ConfigHttp.wrap_case
     def test_with_verbose_get(self):
         verbose_cases_r = verbose_param_r.split(",")
         for verbose in verbose_cases_r:
             code, bcheck = self.c.get_check(verbose)
-            self.assertEqual(code, normal_response_code)
+            self.assertEqual(code, "200")
             self.assertEqual(bcheck, 0)
 
         verbose_cases_e = verbose_param_e.split(",")
         for verbose in verbose_cases_e:
             code, bcheck = self.c.get_check(verbose)
-            self.assertEqual(code, normal_response_code)
+            self.assertEqual(code, "200")
             self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_with_error_param_get(self):
         code, bcheck = self.c.get_check("verbos=1")
-        self.assertEqual(code, normal_response_code)
+        self.assertEqual(code, "200")
         self.assertEqual(bcheck, 0)
 
-# if __name__ == '__main__':
-#     suite = unittest.TestSuite()
-#     suite.addTest(Id("test_normal_get"))
-#     runner = unittest.TextTestRunner()
-#     runner.run(suite)

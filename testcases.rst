@@ -805,23 +805,31 @@
      - Auto/Manual
    * - 1
      - GET without required argument.
-     - 400 code.
+     - 500 code.
      - A
    * - 2
      - GET with "source" argument only.
-     - 400 code.
+     - 500 code.
      - A
    * - 3
      - GET with "dest" argument only.
-     - 400 code.
+     - 500 code.
      - A
    * - 4
-     - POST with "source" and "dest" value.
-     -
+     - GET with "source" and "dest" value but without uid.
+     - 500 code.
      - A
    * - 5
      - GET with "uid" argument only.
-     -
+     - 500 code.
+     - A
+   * - 6
+     - GET with uid, source, dest argument but values error.
+     - 500 code.
+     - A
+   * - 7
+     - GET with uid, source, dest argument and correct value.
+     - 200 code.
      - A
 
 
@@ -846,12 +854,28 @@
      - Auto/Manual
    * - 1
      - GET without required argument.
-     - 400 code.
+     - 500 code.
      - A
    * - 2
-     -
-     -
-     -
+     - GET only with uid argument.
+     - 500 code.
+     - A
+   * - 3
+     - GET only with path argument.
+     - 500 code.
+     - A
+   * - 4
+     - GET with error path argument with correct uid.
+     - 500 code.
+     - A
+   * - 5
+     - GET with correct path and uid.
+     - 200 code.
+     - A
+   * - 6
+     - GET with correct offset and count value.
+     - 200 code.
+     - A
 
 
 **TEST CASE: /api/v0/files/rm**
@@ -875,7 +899,7 @@
      - Auto/Manual
    * - 1
      - GET without required argument.
-     - 400 code.
+     - 500 code.
      - A
    * - 2
      - GET method rm a directory.
@@ -884,6 +908,14 @@
    * - 3
      - GET rm an un-exist file.
      - 500 code. {"Message":"file does not exist","Code":0,"Type":"error"}
+     - A
+   * - 4
+     - GET with uid and a file.
+     - 200 code.
+     - A
+   * - 5
+     - GET with recursive argument.
+     - 200 code.
      - A
 
 
@@ -909,20 +941,31 @@
      - Auto/Manual
    * - 1
      - GET without required argument.
-     - 400 code.
+     - 500 code. {"Message":"error reading request: /api/v0/files/stat"}
      - A
    * - 2
-     - GET with "path"(arg) with error directory value.
+     - GET with "path" with error directory value with correct uid.
      - 500 code.{"Message":"file does not exist","Code":0,"Type":"error"}
      - A
    * - 3
-     - GET with "path"(arg) with correct directory value.
-     - 200 coed. Body correct.
+     - GET with "path" with correct directory value but without uid value.
+     - 500 code.
      - A
    * - 4
      - GET with "format" arguments and value.
      - 200 code.
      - M
+   * - 5
+     - GET with correct path and uid argument.
+     - 200 code.
+     - A
+   * - 6
+     - GET with error hash argument.
+     - 500 code.
+     - A
+
+
+
 
 **TEST CASE: /api/v0/files/write**
 
@@ -945,12 +988,32 @@
      - Auto/Manual
    * - 1
      - GET without required argument.
-     - 400 code.
+     - 500 code. {"Message":"error reading request: /api/v0/files/write"}
      - A
    * - 2
-     -
-     -
-     -
+     - GET with only error uid value
+     - 500 code.
+     - A
+   * - 3
+     - GET with only correct uid value.
+     - 500 code.
+     - A
+   * - 4
+     - GET with correct uid and file argument but without data.
+     - 500 code. {"Message":"request Content-Type isn't multipart/form-data"}
+     - A
+   * - 5
+     - GET with correct uid, file and truncate argument.
+     - 200 code. Correct body.
+     - A
+   * - 6
+     - GET with other arguments which no must required.
+     - 200 code.
+     - A
+   * - 7
+     - GET with other arguments which no must required, but value error.
+     - 500 code.
+     - A
 
 **TEST CASE: /api/v0/name/publish**
 
@@ -972,9 +1035,26 @@
      - Expect
      - Auto/Manual
    * - 1
-     -
-     -
+     - GET without any argument.
+     - 500 code. {"Message":"error reading request: /api/v0/name/publish"}
      - A
+   * - 2
+     - GET with an un-exist uid argument
+     - 500 code.
+     - A
+   * - 3
+     - GET with correct "path" and "uid" value.
+     - 200 code. {"Name":"QmfCKhCxwwmHAnb5m3UF7Qb1ku3f1y2ordg834r9NA5hxN","Value":"/ipfs/QmXUvoNTFCzkWY1a9SPxuERTqDhHz1NKRUF3xj1wD8iQVJ"}
+     - A
+   * - 4
+     - GET with error uid or path
+     - 500 code.
+     - A
+   * - 5
+     - Make cluster only one node.
+     - GET with correct "path" and "uid" value.
+     - 500 code. {"Message":"invalid 'ipfs ref' path","Code":0,"Type":"error"}
+     - M
 
 **TEST CASE: /api/v0/message/pub**
 
@@ -996,8 +1076,8 @@
      - Expect
      - Auto/Manual
    * - 1
-     -
-     -
+     - Temporary unrealized
+     - Temporary unrealized
      - A
 
 **TEST CASE: /api/v0/message/sub**
@@ -1020,8 +1100,8 @@
      - Expect
      - Auto/Manual
    * - 1
-     -
-     -
+     - Temporary unrealized
+     - Temporary unrealized
      - A
 
 
@@ -1046,45 +1126,45 @@
      - Auto/Manual
    * - 1
      - GET and POST without any argument.
-     - 200 code. Body correct.
+     - 200 code. Body correct. {"Version":"0.8.0+git0581a90b0ece7858198b6fc82a369cd61b65e407"}
      - A
    * - 2
      - GET and POST with "number" correct argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 3
      - GET and POST with "number" incorrect argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 4
      - GET and POST with "commit" correct argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 5
      - GET and POST with "commit" incorrect argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 6
      - GET and POST with "repo" correct argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 7
      - GET and POST with "repo" incorrect argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 8
      - GET and POST with "all" correct argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 9
      - GET and POST with "all" incorrect argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 8
      - GET and POST with joint correct argument.
-     -
+     - 200 code. Body correct.
      - A
    * - 9
      - GET and POST with joint incorrect argument.
-     -
+     - 200 code. Body correct.
      - A

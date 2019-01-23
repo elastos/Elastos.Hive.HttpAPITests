@@ -18,9 +18,6 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
-normal_response_code = b.get_common("normal_response_code")
-abnormal_response_code = b.get_common("abnormal_response_code")
-internal_server_error = b.get_common("internal_server_error")
 not_found_code = b.get_common("not_found_code")
 
 api = b.get_api_v0_files_mkdir("api")
@@ -56,14 +53,14 @@ class ApiV0FilesLs(unittest.TestCase):
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
-        self.assertEqual(b1, internal_server_error)
+        self.assertEqual(b1, "500")
 
     @Wrappers.wrap_case
     def test_with_err_path_get(self):
         temp_api = api + "?arg=xxxx"
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, internal_server_error)
+        self.assertEqual(b1, "500")
 
     @Wrappers.wrap_case
     def test_with_path_with_exist_uid_get(self):
@@ -73,15 +70,15 @@ class ApiV0FilesLs(unittest.TestCase):
         temp_api = "%s?arg=/%s&uid=%s" % (api, str(num),uid)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, internal_server_error)
+        self.assertEqual(b1, "500")
 
     @Wrappers.wrap_case
     def test_with_path_with_uid_get(self):
         num = random.randint(0, 99999999999)
-        temp_api = "%s?arg=/%s&uid=%s" % (api, str(num),str(num))
+        temp_api = "%s?path=/%s&uid=%s" % (api, str(num),str(num))
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, normal_response_code)
+        self.assertEqual(b1, "200")
 
     @Wrappers.wrap_case
     def test_with_path_with_only_uid_get(self):
@@ -89,6 +86,5 @@ class ApiV0FilesLs(unittest.TestCase):
         temp_api = "%s?uid=%s" % (api, str(num))
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, normal_response_code)
-
+        self.assertEqual(b1, "200")
 

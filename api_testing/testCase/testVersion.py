@@ -11,10 +11,6 @@ ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_port")
 
 b = read_conf.ReadData()
 api = b.get_version("api")
-normal_response_code = b.get_common("normal_response_code")
-abnormal_response_code = b.get_common("abnormal_response_code")
-not_found_code = b.get_common("not_found_code")
-
 normal_response_body = b.get_version("normal_response_body")
 
 number_param_r = b.get_version("number_param_r")
@@ -69,112 +65,121 @@ class Version(unittest.TestCase):
 
     @ConfigHttp.wrap_case
     def test_normal_get(self):
-        code, bcheck = self.c.get_check()
-        self.assertEqual(code, normal_response_code)
-        self.assertEqual(bcheck, 0)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case
-    def test_normal_post_404(self):
+    def test_normal_post_405(self):
         o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(o)
         logger.info(e)
-        self.assertEqual(e, not_found_code)
+        self.assertEqual(e, "405")
 
     @ConfigHttp.wrap_case
     def test_with_number_get(self):
         number_cases_r = number_param_r.split(",")
         for num in number_cases_r:
-            code, bcheck = self.c.get_check(num)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, num)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
         number_cases_e = number_param_e.split(",")
         for num in number_cases_e:
-            code, bcheck = self.c.get_check(num)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            for num in number_cases_e:
+                temp_api = "%s?%s" % (api, num)
+                a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+                logger.info(b1)
+                self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case
-    def test_with_number_post_404(self):
+    def test_with_number_post_405(self):
         number_cases_r = number_param_r.split(",")
         for num in number_cases_r:
             parm = self.f.curl_post_str(num)
             o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api, parm)
             logger.info(o)
             logger.info(e)
-            self.assertIn(not_found_code, e)
+            self.assertIn("405", e)
 
     @ConfigHttp.wrap_case
     def test_with_commit_get(self):
         commit_cases_r = commit_param_r.split(",")
         for commit in commit_cases_r:
-            code, bcheck = self.c.get_check(commit)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, commit)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
         commit_cases_e = commit_param_e.split(",")
         for commit in commit_cases_e:
-            code, bcheck = self.c.get_check(commit)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, commit)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case
-    def test_with_commit_post_404(self):
+    def test_with_commit_post_405(self):
         commit_cases_r = commit_param_r.split(",")
         for commit in commit_cases_r:
             parm = self.f.curl_post_str(commit)
             o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api, parm)
             logger.info(o)
             logger.info(e)
-            self.assertIn(not_found_code, e)
+            self.assertIn("405", e)
 
     @ConfigHttp.wrap_case
     def test_with_repo_get(self):
         repo_cases_r = repo_param_r.split(",")
         for repo in repo_cases_r:
-            code, bcheck = self.c.get_check(repo)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, repo)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
         repo_cases_e = repo_param_e.split(",")
         for repo in repo_cases_e:
-            code, bcheck = self.c.get_check(repo)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, repo)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case
-    def test_with_repo_post_404(self):
+    def test_with_repo_post_405(self):
         repo_cases_r = repo_param_r.split(",")
         for repo in repo_cases_r:
             parm = self.f.curl_post_str(repo)
             o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api, parm)
             logger.info(o)
             logger.info(e)
-            self.assertIn(not_found_code, e)
+            self.assertIn("405", e)
 
     @ConfigHttp.wrap_case
     def test_with_all_get(self):
         all_cases_r = all_param_r.split(",")
         for all in all_cases_r:
-            code, bcheck = self.c.get_check(all)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, all)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
         all_cases_e = all_param_e.split(",")
         for all in all_cases_e:
-            code, bcheck = self.c.get_check(all)
-            self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+            temp_api = "%s?%s" % (api, all)
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+            logger.info(b1)
+            self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case
-    def test_with_all_post_404(self):
+    def test_with_all_post_405(self):
         all_cases_r = all_param_r.split(",")
         for all in all_cases_r:
             parm = self.f.curl_post_str(all)
             o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api, parm)
             logger.info(o)
             logger.info(e)
-            self.assertIn(not_found_code, e)
+            self.assertIn("405", e)
 
     @ConfigHttp.wrap_case
     def test_with_combined_parameters_get(self):
@@ -189,18 +194,11 @@ class Version(unittest.TestCase):
         self.assertEqual(res, 0)
 
     @ConfigHttp.wrap_case
-    def test_with_combined_parameters_post_404(self):
+    def test_with_combined_parameters_post_405(self):
         parm = self.f.curl_post_str(combined_parameters)
 
-        o, e = self.f.run_cmd("curl -X POST " + ipfs_master_api_baseurl + ":" \
-                          + ipfs_master_api_port + api + " -d '%s'" % parm)
+        o, e = self.f.run_cmd("curl -v -X POST " + ipfs_master_api_baseurl + ":"
+                              + ipfs_master_api_port + api + " -d '%s'" % parm)
         logger.info(o)
         logger.info(e)
-        self.assertIn(not_found_code, e)
-
-
-# if __name__ == '__main__':
-#     suite = unittest.TestSuite()
-    # suite.addTest(Version("test_normal_get"))
-    # runner = unittest.TextTestRunner()
-    # runner.run(suite)
+        self.assertIn("405", o)

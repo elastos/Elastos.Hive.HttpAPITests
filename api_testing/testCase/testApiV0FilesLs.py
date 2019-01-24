@@ -24,7 +24,7 @@ api = b.get_api_v0_files_ls("api")
 normal_response_body = b.get_api_v0_files_ls("normal_response_body")
 
 
-class ApiV0FilesMkdir(unittest.TestCase):
+class ApiV0FilesLs(unittest.TestCase):
     '''
     List directories in the private mutable namespace.
 
@@ -65,7 +65,7 @@ class ApiV0FilesMkdir(unittest.TestCase):
         temp_api = "%s?arg=/&uid=%s" % (api, uid)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, "500")
+        self.assertEqual(b1, "200")
 
     @Wrappers.wrap_case
     def test_only_with_uid_get(self):
@@ -74,7 +74,7 @@ class ApiV0FilesMkdir(unittest.TestCase):
         temp_api = "%s?uid=%s" % (api, uid)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, "500")
+        self.assertEqual(b1, "200")
 
     @Wrappers.wrap_case
     def test_only_with_err_uid_get(self):

@@ -18,13 +18,12 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
-not_found_code = b.get_common("not_found_code")
 
 api = b.get_api_v0_files_mkdir("api")
 normal_response_body = b.get_api_v0_pin_rm("normal_response_body")
 
 
-class ApiV0FilesLs(unittest.TestCase):
+class ApiV0FilesMkdir(unittest.TestCase):
     '''
 
     Create directories.
@@ -74,8 +73,13 @@ class ApiV0FilesLs(unittest.TestCase):
 
     @Wrappers.wrap_case
     def test_with_path_with_uid_get(self):
-        num = random.randint(0, 99999999999)
-        temp_api = "%s?path=/%s&uid=%s" % (api, str(num),str(num))
+        # Create new uid
+        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
+        logger.info(uid)
+
+        pname = self.f.random_str()
+
+        temp_api = "%s?path=/%s&uid=%s" % (api, pname, uid)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, "200")

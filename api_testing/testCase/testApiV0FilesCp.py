@@ -20,7 +20,8 @@ b = read_conf.ReadData()
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
 api = b.get_api_v0_files_cp("api")
-normal_response_body = b.get_api_v0_files_cp("normal_response_body")
+write_api = b.get_api_v0_files_write("api")
+mkdir_api = b.get_api_v0_files_mkdir("api")
 
 
 class ApiV0FilesCp(unittest.TestCase):
@@ -45,7 +46,7 @@ class ApiV0FilesCp(unittest.TestCase):
 
     def __init__(self, methodName='runTest'):
         self.f = ConfigHttp("ipfs_master_api_endpoint_port")
-        self.c = CaseMethod(api, normal_response_body, "ipfs_master_api_endpoint_port")
+        self.c = CaseMethod(api, {}, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
     @Wrappers.wrap_case
@@ -53,3 +54,111 @@ class ApiV0FilesCp(unittest.TestCase):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "500")
+
+
+        # Create new uid
+        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
+        logger.info(uid)
+
+        err_path = "/%s" % self.f.random_str()
+
+        temp_api = api + "?uid=" + uid
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "500")
+
+    @Wrappers.wrap_case
+    def test_with_correct_args_get(self):
+        # Create new uid
+        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
+        logger.info(uid)
+
+        # Create random file name.
+        fname = "%s" % self.f.random_str()
+        logger.info(fname)
+        with open(fname, "a") as f:
+            f.write("This is file %s\n" % fname)
+        f.close()
+
+        temp_api = "%s?create=true&path=/%s&uid=%s" % (write_api, fname, uid)
+
+        a1, b1 = self.f.run_cmd("curl -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
+                                                                     ipfs_master_api_port, temp_api))
+        logger.info(a1)
+        self.assertIn("200 OK", a1)
+        os.remove(fname)
+
+        # Create randon new path
+        npath = "/%s" % self.f.random_str()
+        temp_api = "%s?uid=%s" % (mkdir_api, npath)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")
+
+        # cp
+        temp_api = "%s?uid=%s&source=/&dest=%s" % (api, uid, npath)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")
+
+    @Wrappers.wrap_case
+    def test_with_err_source_get(self):
+        # Create new uid
+        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
+        logger.info(uid)
+
+        # Create random file name.
+        fname = "%s" % self.f.random_str()
+        logger.info(fname)
+        with open(fname, "a") as f:
+            f.write("This is file %s\n" % fname)
+        f.close()
+
+        temp_api = "%s?create=true&path=/%s&uid=%s" % (write_api, fname, uid)
+
+        a1, b1 = self.f.run_cmd("curl -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
+                                                                     ipfs_master_api_port, temp_api))
+        logger.info(a1)
+        self.assertIn("200 OK", a1)
+        os.remove(fname)
+
+        # Create randon new path
+        npath = "/%s" % self.f.random_str()
+        temp_api = "%s?uid=%s" % (mkdir_api, npath)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")
+
+        # cp
+        temp_api = "%s?uid=%s&source=/xxx&dest=%s" % (api, uid, npath)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "500")
+
+    @Wrappers.wrap_case
+    def test_with_err_source_get(self):
+        # Create new uid
+        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
+        logger.info(uid)
+
+        # Create random file name.
+        fname = "%s" % self.f.random_str()
+        logger.info(fname)
+        with open(fname, "a") as f:
+            f.write("This is file %s\n" % fname)
+        f.close()
+
+        temp_api = "%s?create=true&path=/%s&uid=%s" % (write_api, fname, uid)
+
+        a1, b1 = self.f.run_cmd("curl -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
+                                                                     ipfs_master_api_port, temp_api))
+        logger.info(a1)
+        self.assertIn("200 OK", a1)
+        os.remove(fname)
+
+        # cp
+        temp_api = "%s?uid=%s&source=/&dest=/xxxx" % (api, uid)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")
+

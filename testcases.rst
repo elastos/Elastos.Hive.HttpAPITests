@@ -167,12 +167,12 @@
      - A
    * - 3
      - Create without cid. curl -X POST http://10.10.165.11:9094/pins/sync
-     - 200 code.
+     - 200 code. Body is [].
      - A
    * - 4
      - On another node create session with another cid.
      - 200 code.
-     - A
+     - M
    * - 5
      - Check cid string from step 1 on different node.
      - Correct.
@@ -203,6 +203,10 @@
      - A
    * - 2
      - Create session with incorrect cid string.
+     - 400 code.
+     - A
+   * - 3
+     - Create session without cid string.
      - 400 code.
      - A
 
@@ -489,28 +493,28 @@
      - Expect
      - Auto/Manual
    * - 1
-     - POST and GET without any parameter. http://10.10.165.11:9095/api/v0/add
+     - GET without any parameter. http://10.10.165.11:9095/api/v0/file/add
      - 500 code. {"Message":"error reading request: request Content-Type isn't multipart/form-data"}
      - A
    * - 2
-     - POST and GET required argument "path".
+     - GET with required argument "path".
      - 200 code and add file successful. Return body correct.
      - A
    * - 3
-     - POST and GET required argument "path", but file not exist.
+     - GET required argument "path", but file not exist.
      - Return fail message.
      - A
    * - 4
-     - POST and GET a random string of "path".
-     - 200 code.
+     - GET a random string of "path".
+     - Return fail message.
      - A
    * - 5
-     - POST and GET with correct value of "recursive".
+     - GET with correct value of "recursive".
      - 200 code.
      - A
    * - 6
      - POST and GET with incorrect value of "recursive".
-     - 200 code.
+     - 500 code.
      - A
    * - 7
      - POST and GET with correct value of "hidden".
@@ -518,11 +522,11 @@
      - A
    * - 8
      - POST and GET with incorrect value of "hidden".
-     - 200 code.
+     - 500 code. {"Message":"error parsing options:parameter recursive invalid"}
      - A
    * - 9
      - GET with error parameter string. Eg. recursivxxx
-     - 200 code.
+     - 500 code. {"Message":"error parsing options:parameter recursive invalid"}
      - A
    * - 10
      - POST and GET with correct joint parameter.
@@ -534,6 +538,43 @@
      - A
    * - 12
      - POST and GET with joint parameter. But some of parameter incorrect.
+     - 200 code.
+     - A
+
+**TEST CASE: /api/v0/file/cat**
+
+`Descriptions:`
+    cat files content from the hive cluster
+    GET, POST
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - GET without arg argument.
+     - 500 code.
+     - A
+   * - 2
+     - GET with an error hash code for arg.
+     - 500 code.
+     - A
+   * - 3
+     - GET with an un-exist hash code for arg.
+     - 500 code.
+     - A
+   * - 4
+     - GET with correct hash value.
      - 200 code.
      - A
 
@@ -558,28 +599,28 @@
      - Expect
      - Auto/Manual
    * - 1
-     - GET and POST without required argument.
-     - 400 code.
+     - GET without required argument.
+     - 500 code.
      - A
    * - 2
-     - GET and POST with correct "arg" argument.
+     - GET with correct "arg" argument.
      - 200 code and body correct.
      - A
    * - 3
-     - GET and POST with correct "arg" argument but value incorrect. Eg. xxxx
+     - GET with error "arg" value. Eg. xxxx
      - 500 code.
      - A
    * - 4
-     - GET and POST with correct "arg" argument ,value correct but not exist.Eg. QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQh
+     - GET with correct "arg" argument ,value correct but not exist.Eg. QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQh
      - Timeout and error.
      - A
    * - 5
      - GET with "output" argument.
-     - <>
+     - <Discard in current version.>
      - M
    * - 6
      - GET with "archive" argument.
-     - <>
+     - <Discard in current version.>
      - M
    * - 7
      - GET with "compress" argument with correct bool value.
@@ -660,13 +701,30 @@
      - Expect
      - Auto/Manual
    * - 1
-     - GET and POST without required argument.
+     - GET without required argument.
      - 500 code. {"Message":"error reading request: /api/v0/files/cp"}
      - A
    * - 2
-     -
-     -
+     - GET only with uid argument.
+     - 500 code. {"Message":"error reading request: /api/v0/files/cp?uid=uid-e3923bb6-526f-46ef-9c98-2bff329f0c57"}
      - A
+   * - 3
+     - GET with correct uid, source and dest argument.
+     - 200 code.
+     - A
+   * - 4
+     - GET with error source value, with correct uid and dest.
+     - 500 code.
+     - A
+   * - 5
+     - GET with error dest value, with correct uid and source.
+     - 200 code.
+     - A
+   * - 6
+     - GET with random dest value. Example: /xxsssxxx
+     - 200 code.
+     - A
+
 
 **TEST CASE: /api/v0/files/flush**
 

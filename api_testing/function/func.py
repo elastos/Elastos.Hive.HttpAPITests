@@ -166,6 +166,12 @@ class ConfigHttp:
         return res[0:-1]
 
     def check_body(self, res_body, expect_body):
+        '''
+        Need two dict.
+        :param res_body:
+        :param expect_body:
+        :return:
+        '''
         logger.info("Response body keys: %s" % res_body.keys())
         logger.info("Expect body keys: %s" % expect_body.keys())
         res = cmp(res_body.keys(), expect_body.keys())

@@ -58,12 +58,16 @@ class ReadData:
         value = self.data_content.get("PINS", name)
         return value
 
+    def get_pins_recover(self, name):
+        value = self.data_content.get("PINS_RECOVER", name)
+        return value
+
     def get_pins_cid_sync(self, name):
         value = self.data_content.get("PINS_CID_SYNC", name)
         return value
 
-    def get_pins_recover(self, name):
-        value = self.data_content.get("PINS_RECOVER", name)
+    def get_pins_cid_recover(self, name):
+        value = self.data_content.get("PINS_CID_RECOVER", name)
         return value
 
     def get_api_v0_uid_new(self, name):
@@ -86,8 +90,20 @@ class ReadData:
         value = self.data_content.get("API_V0_PIN_RM", name)
         return value
 
+    def get_api_v0_file_add(self, name):
+        value = self.data_content.get("API_V0_FILE_ADD", name)
+        return value
+
     def get_api_v0_file_ls(self, name):
         value = self.data_content.get("API_V0_FILE_LS", name)
+        return value
+
+    def get_api_v0_file_get(self, name):
+        value = self.data_content.get("API_V0_FILE_GET", name)
+        return value
+
+    def get_api_v0_file_cat(self, name):
+        value = self.data_content.get("API_V0_FILE_CAT", name)
         return value
 
     def get_api_v0_files_cp(self, name):

@@ -81,32 +81,30 @@ class Pins(unittest.TestCase):
         self.assertEqual(bcheck, not_found_code)
 
     @ConfigHttp.wrap_case
-    def test_with_verbose(self):
+    def test_with_verbose_get(self):
         verbose_cases_r = verbose_param_r.split(",")
         for verbose in verbose_cases_r:
             code, bcheck = self.c.get_check(verbose)
             self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
 
         verbose_cases_e = verbose_param_e.split(",")
         for verbose in verbose_cases_e:
             code, bcheck = self.c.get_check(verbose)
             self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
-    def test_with_quiet(self):
+    def test_with_quiet_get(self):
         quiet_cases_r = quiet_param_r.split(",")
         for quiet in quiet_cases_r:
             code, bcheck = self.c.get_check(quiet)
             self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+
 
         quiet_cases_e = quiet_param_e.split(",")
         for quiet in quiet_cases_e:
             code, bcheck = self.c.get_check(quiet)
             self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+
 
     @ConfigHttp.wrap_case
     def test_joint_arguments_get(self):
@@ -114,4 +112,4 @@ class Pins(unittest.TestCase):
         for p in p_c:
             code, bcheck = self.c.get_check(p)
             self.assertEqual(code, normal_response_code)
-            self.assertEqual(bcheck, 0)
+

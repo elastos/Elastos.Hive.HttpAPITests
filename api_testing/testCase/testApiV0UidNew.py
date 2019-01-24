@@ -19,13 +19,6 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
-normal_response_code = b.get_common("normal_response_code")
-abnormal_response_code = b.get_common("abnormal_response_code")
-not_found_code = b.get_common("not_found_code")
-verbose_param_r = b.get_common("verbose_param_r")
-verbose_param_e = b.get_common("verbose_param_e")
-quiet_param_r = b.get_common("quiet_param_r")
-quiet_param_e = b.get_common("quiet_param_e")
 
 api = b.get_api_v0_uid_new("api")
 normal_response_body = b.get_api_v0_uid_new("normal_response_body")
@@ -51,9 +44,9 @@ class ApiV0UidNew(unittest.TestCase):
 
     @Wrappers.wrap_case
     def test_no_argument_get(self):
-        code, bcheck = self.c.get_check()
-        self.assertEqual(code, normal_response_code)
-        self.assertEqual(bcheck, 0)
+        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")
 
     @Wrappers.wrap_case
     def test_uid_changed(self):
@@ -70,7 +63,7 @@ class ApiV0UidNew(unittest.TestCase):
             api_temp = "%s?%s" % (api, p)
             a1, code = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
             logger.info(code)
-            self.assertEqual(code, normal_response_code)
+            self.assertEqual(code, "200")
 
 
 

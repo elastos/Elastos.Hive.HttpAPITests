@@ -31,7 +31,6 @@ a = read_conf.ReadConfig()
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_port")
 
-# pins_recover_case_post = b.get_pins_recover("200_code_cases_post")
 api_temp = b.get_pins_recover("api_temp")
 api_err= b.get_pins_recover("api_err")
 
@@ -84,7 +83,6 @@ class PinsRecover(unittest.TestCase):
         cc = CaseMethod(api_temp, "{}")
         code, bcheck = cc.post_check()
         self.assertEqual(code, normal_response_code)
-        self.assertEqual(bcheck, 0)
 
     @ConfigHttp.wrap_case
     def test_with_incorrect_argument_post(self):

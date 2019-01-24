@@ -184,8 +184,7 @@ class Version(unittest.TestCase):
     @ConfigHttp.wrap_case
     def test_with_combined_parameters_get(self):
         parm = combined_parameters.replace(",", "&")
-        o, e = self.f.run_cmd("curl " + ipfs_master_api_baseurl + ":" \
-                          + ipfs_master_api_port + api + "?" + parm)
+        o, e = self.f.run_cmd("curl \"" + ipfs_master_api_baseurl + ":" + ipfs_master_api_port + api + "?" + parm + "\"")
         logger.info(o)
         logger.info(e)
         res_dict = json.loads(e)

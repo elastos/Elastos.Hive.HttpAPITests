@@ -27,8 +27,12 @@
      - A
    * - 4
      - Repeat step 1, 2, 3 on another node.
-     - Result 1,2, 3.
+     - Result 1, 2, 3.
      - A
+   * - 5
+     - Function: GET check id result. Then a new node add into ipfs-cluster. Check the api again.
+     - 200 code. A new peer in the result. Filed name: "cluster_peers".
+     - M
 
 **TEST CASE: /peers**
 
@@ -65,6 +69,10 @@
      - Repeat step 1, 2, 3 on another node.
      - Result 1,2,3.
      - A
+   * - 5
+     - Function: GET check the api result. Then a new node add into ipfs-cluster. Check the api result again.
+     - 200 code. A new peer in the result. Filed name: "cluster_peers".
+     - M
 
 **TEST CASE: /peers/{peerID}**
 
@@ -137,6 +145,10 @@
      - Repeat step 1, 2, 3, 4 on another node.
      - Result 1-4.
      - A
+   * - 6
+     - Function: Add files and generate "pinned", "pin_err" record.
+     - Check api result. It contains correct pin status.
+     - M
 
 **TEST CASE: /pins/{cid}/sync**
 
@@ -176,6 +188,10 @@
    * - 5
      - Check cid string from step 1 on different node.
      - Correct.
+     - M
+   * - 6
+     - Function: use a cid post the api.
+     - Check the result. In peer map, each peer has correct status.
      - M
 
 **TEST CASE: /pins/{cid}/recover**
@@ -277,6 +293,14 @@
      - GET the interface with extra argument.
      - 200 code and new uid.
      - A
+   * - 4
+     - Function: GET api 10 times, check each new id different.
+     - Successful.
+     - A
+   * - 5
+     - Function: (1) Use old id mkdir /old_uid_mk and add a file. (2) Generate a new id and peerid. (3) Another node use the new peer id check the directory tree.
+     - Operations successful. New peerid cannot get the directory tree.
+     - M
 
 **TEST CASE: /api/v0/uid/login**
 
@@ -313,6 +337,10 @@
      - GET with correct uid.
      - 200 code and body correct.
      - A
+   * - 5
+     - Function: (1) Create new id and peerid. (2) Create some directory and add some files. (3) GET/POST the api. can generate new id. (4) Use new id check the directory and file view tree on another node.
+     - (1) Operation successful. (2) Operation successful. (3) Operation successful. New id should different from old id. (4) Can get the view tree.
+     - M
 
 **TEST CASE: /api/v0/file/pin/add**
 
@@ -371,6 +399,8 @@
      - POST and GET with joint parameter. But some of parameter incorrect. Eg. recursive=1&hiddenxx=1
      - 200 code.
      - A
+   * - 10
+     - Function:
 
 **TEST CASE: /api/v0/file/pin/ls**
 

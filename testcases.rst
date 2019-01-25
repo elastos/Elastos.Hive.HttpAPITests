@@ -1226,3 +1226,130 @@
      - GET and POST with joint incorrect argument.
      - 200 code. Body correct.
      - A
+
+**TEST CASE: [PERF] /api/v0/file/add**
+
+`Descriptions:`
+    Write Performance testing.
+    GET
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - On a linux node make a tmp ram-disk.
+     - Successful.
+     - M
+   * - 2
+     - Generate a valid file 10G size in the ram-disk.
+     - Successful.
+     - M
+   * - 3
+     - Use GET method add the file to ipfs-cluster. Remember the speed and time spent.
+     - Successful.
+     - M
+   * - 4
+     - Use the GET method add the file again. Remember the speed and time spent.
+     - Successful.
+     - M
+   * - 5
+     - Generate a so large file on a node more 200G. Add the so large file to ipfs-cluster.
+     - Successful. Should not break off.
+     - M
+   * - 6
+     - Create 102400 1M files.
+     - Successful.
+     - M
+   * - 7
+     - Add the files into ipfs-cluster. Remember the speed and time.
+     - Successful.
+     - M
+
+
+**TEST CASE: [PERF] /api/v0/file/get**
+
+`Descriptions:`
+    Get Performance testing.
+    GET
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+    On a node
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - On a linux node make a tmp ram-disk.
+     - Successful.
+     - M
+   * - 2
+     - Generate a valid file 10G size in the ram-disk.
+     - Successful.
+     - M
+   * - 3
+     - Use GET method get the file from ipfs-cluster to another file. Remember the speed and time spent.
+     - Successful.
+     - M
+   * - 4
+     - Pin the file after pinned. Get the file on the third node. Remeber the speed and time.
+     - Successful.
+     - M
+   * - 5
+     - Use the GET method get the file on another node. Remember the speed and time spent.
+     - Successful.
+     - M
+   * - 6
+     - Generate a so large file on a node more 200G. Get the so large file from ipfs-cluster on another node.
+     - Successful. Should not break off.
+     - M
+
+
+**TEST CASE: [PERF] /api/v0/file/ls**
+
+`Descriptions:`
+    Ls Performance testing.
+    GET
+
+`Preparation:`
+    IPFS-cluster with some nodes.
+
+`Steps:`
+
+.. list-table::
+   :widths: 10 30 30 10
+   :header-rows: 1
+
+   * - No.
+     - Actions
+     - Expect
+     - Auto/Manual
+   * - 1
+     - Makedir a directory, and generate 10000000 files in the directory.
+     - Successful.
+     - M
+   * - 2
+     - Add the directory and remember directory's Hash value.
+     - Successful.
+     - M
+   * - 3
+     - On another node. Ls the directory.
+     - Successful. Remember the time cost.
+     - M

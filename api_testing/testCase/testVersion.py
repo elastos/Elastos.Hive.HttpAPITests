@@ -63,20 +63,20 @@ class Version(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body)
         unittest.TestCase.__init__(self, methodName)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_normal_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "200")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_normal_post_405(self):
         o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(o)
         logger.info(e)
         self.assertEqual(e, "405")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_number_get(self):
         number_cases_r = number_param_r.split(",")
         for num in number_cases_r:
@@ -93,7 +93,7 @@ class Version(unittest.TestCase):
                 logger.info(b1)
                 self.assertEqual(b1, "200")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_number_post_405(self):
         number_cases_r = number_param_r.split(",")
         for num in number_cases_r:
@@ -103,7 +103,7 @@ class Version(unittest.TestCase):
             logger.info(e)
             self.assertIn("405", e)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_commit_get(self):
         commit_cases_r = commit_param_r.split(",")
         for commit in commit_cases_r:
@@ -119,7 +119,7 @@ class Version(unittest.TestCase):
             logger.info(b1)
             self.assertEqual(b1, "200")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_commit_post_405(self):
         commit_cases_r = commit_param_r.split(",")
         for commit in commit_cases_r:
@@ -129,7 +129,7 @@ class Version(unittest.TestCase):
             logger.info(e)
             self.assertIn("405", e)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_repo_get(self):
         repo_cases_r = repo_param_r.split(",")
         for repo in repo_cases_r:
@@ -145,7 +145,7 @@ class Version(unittest.TestCase):
             logger.info(b1)
             self.assertEqual(b1, "200")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_repo_post_405(self):
         repo_cases_r = repo_param_r.split(",")
         for repo in repo_cases_r:
@@ -155,7 +155,7 @@ class Version(unittest.TestCase):
             logger.info(e)
             self.assertIn("405", e)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_all_get(self):
         all_cases_r = all_param_r.split(",")
         for all in all_cases_r:
@@ -171,7 +171,7 @@ class Version(unittest.TestCase):
             logger.info(b1)
             self.assertEqual(b1, "200")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_all_post_405(self):
         all_cases_r = all_param_r.split(",")
         for all in all_cases_r:
@@ -181,7 +181,7 @@ class Version(unittest.TestCase):
             logger.info(e)
             self.assertIn("405", e)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_combined_parameters_get(self):
         parm = combined_parameters.replace(",", "&")
         o, e = self.f.run_cmd("curl \"" + ipfs_master_api_baseurl + ":" + ipfs_master_api_port + api + "?" + parm + "\"")
@@ -192,7 +192,7 @@ class Version(unittest.TestCase):
         res = self.f.check_body(res_dict, expect_dict)
         self.assertEqual(res, 0)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_combined_parameters_post_405(self):
         parm = self.f.curl_post_str(combined_parameters)
 

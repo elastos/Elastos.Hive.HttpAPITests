@@ -41,12 +41,12 @@ class PeersPid(unittest.TestCase):
         self.f = ConfigHttp()
         unittest.TestCase.__init__(self, methodName)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_no_peerid_delete(self):
         code, bcheck = self.f.run_cmd("curl -X DELETE %s:%s%s" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
         self.assertEqual(bcheck.strip(), "")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_error_peerid_delete(self):
         code, bcheck = self.f.run_cmd("curl -X DELETE %s:%s%s/XXX" % (ipfs_master_api_baseurl, ipfs_master_api_port, api))
         d = json.loads(bcheck)

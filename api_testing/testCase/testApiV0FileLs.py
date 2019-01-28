@@ -61,20 +61,20 @@ class ApiV0FileLs(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "400")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_err_arg_value_get(self):
         temp = "%s?arg=xxxxxx" % api
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "400")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_correct_value_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         fname = self.f.random_str()
@@ -82,7 +82,7 @@ class ApiV0FileLs(unittest.TestCase):
             f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
                                                                        ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]

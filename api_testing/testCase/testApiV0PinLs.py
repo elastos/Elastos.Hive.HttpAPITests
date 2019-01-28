@@ -64,20 +64,20 @@ class ApiV0PinLs(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, normal_response_code)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_arg_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         with open("temp.txt", "a") as f:
             f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
@@ -86,7 +86,7 @@ class ApiV0PinLs(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, normal_response_code)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_quiet_get(self):
         quiet_cases_r = quiet_param_r.split(",")
         for q in quiet_cases_r:
@@ -95,7 +95,7 @@ class ApiV0PinLs(unittest.TestCase):
             logger.info(b1)
             self.assertEqual(b1, normal_response_code)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_type_get(self):
         type_l = types.split(",")
         for type in type_l:
@@ -104,7 +104,7 @@ class ApiV0PinLs(unittest.TestCase):
             logger.info(b1)
             self.assertEqual(b1, normal_response_code)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_joint_parm_get(self):
         p_c = self.f.list_conf_case(cases_200)
         for p in p_c:

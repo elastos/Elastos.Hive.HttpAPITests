@@ -73,18 +73,18 @@ class PinsRecover(unittest.TestCase):
         self.c = CaseMethod(api, "{}")
         unittest.TestCase.__init__(self, methodName)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_no_argument_post(self):
         code, bcheck = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         self.assertEqual(bcheck, abnormal_response_code)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_correct_argument_post(self):
         cc = CaseMethod(api_temp, "{}")
         code, bcheck = cc.post_check()
         self.assertEqual(code, normal_response_code)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_incorrect_argument_post(self):
         cc = CaseMethod(api_err, "{}")
         code, bcheck = cc.post_check()

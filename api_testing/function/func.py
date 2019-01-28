@@ -104,8 +104,8 @@ class ConfigHttp:
             return None
 
     def get_interface(self, addr, aport, api):
-        self.logger.info("[GET API] curl \"%s:%s%s\"" % (addr, aport, api))
-        a1, b1 = self.run_cmd("curl \"%s:%s%s\"" % (addr, aport, api))
+        self.logger.info("[GET API] curl  --connect-timeout 10 -m 10 \"%s:%s%s\"" % (addr, aport, api))
+        a1, b1 = self.run_cmd("curl --connect-timeout 10 -m 10 \"%s:%s%s\"" % (addr, aport, api))
         # self.logger.info("[GET API E] %s" % a1)
         self.logger.info("[GET API OUTPUT] %s" % b1)
         return a1, b1
@@ -225,17 +225,19 @@ class ConfigHttp:
         return p_c
 
     @staticmethod
-    def wrap_case(func):
-        def run(*argv):
-            logger.info("-" * 25)
-            logger.info("TEST CASE: [%s]" % func.__name__)
-            logger.info("-" * 25)
-            if argv:
-                ret = func(*argv)
-            else:
-                ret = func()
-            return ret
-        return run
+    def wrap_case(filename):
+        def w_case(func):
+            def run(*argv):
+                logger.info("-" * 25)
+                logger.info("[%s] TEST CASE: [%s]" % (filename, func.__name__))
+                logger.info("-" * 25)
+                if argv:
+                    ret = func(*argv)
+                else:
+                    ret = func()
+                return ret
+            return run
+        return w_case
 
 
 class Wrappers:
@@ -255,17 +257,19 @@ class Wrappers:
         self.files = {}
 
     @staticmethod
-    def wrap_case(func):
-        def run(*argv):
-            logger.info("#" * 25)
-            logger.info("TEST CASE: [%s]" % func.__name__)
-            logger.info("#" * 25)
-            if argv:
-                ret = func(*argv)
-            else:
-                ret = func()
-            return ret
-        return run
+    def wrap_case(filename):
+        def w_case(func):
+            def run(*argv):
+                logger.info("-" * 25)
+                logger.info("[%s] TEST CASE: [%s]" % (filename, func.__name__))
+                logger.info("-" * 25)
+                if argv:
+                    ret = func(*argv)
+                else:
+                    ret = func()
+                return ret
+            return run
+        return w_case
 
 
 class CaseMethod:

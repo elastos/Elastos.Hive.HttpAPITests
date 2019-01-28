@@ -39,13 +39,13 @@ class ApiV0FileCat(unittest.TestCase):
         self.f = ConfigHttp("ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_correct_arg_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -55,7 +55,7 @@ class ApiV0FileCat(unittest.TestCase):
         f.close()
 
         # Add the file.
-        a1, b1 = self.f.run_cmd("curl -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
                                                                        ipfs_master_api_port))
         logger.info(b1)
 
@@ -66,7 +66,7 @@ class ApiV0FileCat(unittest.TestCase):
         self.assertEqual(b1, "200")
         os.remove(fname)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_err_arg_get(self):
         temp_api = "%s?arg=/xxxxxx" % api
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
@@ -74,7 +74,7 @@ class ApiV0FileCat(unittest.TestCase):
         self.assertEqual(b1, "500")
 
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_unexist_arg_get(self):
         temp = self.f.random_str(44)
         un_exist_arg = "Qm%s" % temp

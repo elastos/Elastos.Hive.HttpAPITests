@@ -68,19 +68,19 @@ class Pins(unittest.TestCase):
         self.c = CaseMethod(api, "{}")
         unittest.TestCase.__init__(self, methodName)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_normal_get(self):
         code, bcheck = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         self.assertEqual(bcheck, normal_response_code)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_error_string_get(self):
         temp = copy.deepcopy(api)
         temp = temp + "s"
         code, bcheck = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
         self.assertEqual(bcheck, not_found_code)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_verbose_get(self):
         verbose_cases_r = verbose_param_r.split(",")
         for verbose in verbose_cases_r:
@@ -92,7 +92,7 @@ class Pins(unittest.TestCase):
             code, bcheck = self.c.get_check(verbose)
             self.assertEqual(code, normal_response_code)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_quiet_get(self):
         quiet_cases_r = quiet_param_r.split(",")
         for quiet in quiet_cases_r:
@@ -106,7 +106,7 @@ class Pins(unittest.TestCase):
             self.assertEqual(code, normal_response_code)
 
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_joint_arguments_get(self):
         p_c = self.f.list_conf_case(pins_case)
         for p in p_c:

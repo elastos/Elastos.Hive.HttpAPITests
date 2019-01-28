@@ -42,13 +42,13 @@ class ApiV0UidNew(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_argument_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "200")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_uid_changed(self):
         a1, b1 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
@@ -56,7 +56,7 @@ class ApiV0UidNew(unittest.TestCase):
         logger.info(b2)
         self.assertNotEqual(b1, b2)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_get_with_str(self):
         p_c = self.f.list_conf_case(cases_200)
         for p in p_c:

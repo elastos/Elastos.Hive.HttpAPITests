@@ -56,13 +56,13 @@ class Id(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body)
         unittest.TestCase.__init__(self, methodName)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_normal_get(self):
         code, bcheck = self.c.get_check()
         self.assertEqual(code, "200")
         self.assertEqual(bcheck, 0)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_error_api_get(self):
         f = ConfigHttp()
         temp_api = api * 2
@@ -71,7 +71,7 @@ class Id(unittest.TestCase):
         logger.info(e)
         self.assertEqual(e, "404")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_normal_post_405(self):
         # Check code 404
         o, e = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
@@ -79,7 +79,7 @@ class Id(unittest.TestCase):
         logger.info(e)
         self.assertEqual(e, "405")
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_verbose_get(self):
         verbose_cases_r = verbose_param_r.split(",")
         for verbose in verbose_cases_r:
@@ -93,7 +93,7 @@ class Id(unittest.TestCase):
             self.assertEqual(code, "200")
             self.assertEqual(bcheck, 0)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_error_param_get(self):
         code, bcheck = self.c.get_check("verbos=1")
         self.assertEqual(code, "200")

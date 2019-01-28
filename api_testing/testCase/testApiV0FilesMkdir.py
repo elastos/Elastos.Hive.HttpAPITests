@@ -48,20 +48,20 @@ class ApiV0FilesMkdir(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_err_path_get(self):
         temp_api = api + "?arg=xxxx"
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_path_with_exist_uid_get(self):
         num = random.randint(0, 99999999999)
         uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
@@ -71,7 +71,7 @@ class ApiV0FilesMkdir(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_path_with_uid_get(self):
         # Create new uid
         uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
@@ -84,7 +84,7 @@ class ApiV0FilesMkdir(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, "200")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_path_with_only_uid_get(self):
         num = random.randint(0, 99999999999)
         temp_api = "%s?uid=%s" % (api, str(num))

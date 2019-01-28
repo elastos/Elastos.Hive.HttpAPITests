@@ -51,14 +51,14 @@ class PinsCidRecover(unittest.TestCase):
         self.f = ConfigHttp("ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_without_cid_post(self):
         temp_api = "%s/recover" % api
         a1, b1 = self.f.curl_post_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, "400")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_correct_cid_post(self):
         fname = self.f.random_str()
         logger.info(fname)
@@ -67,7 +67,7 @@ class PinsCidRecover(unittest.TestCase):
         f.close()
 
         # Add the file.
-        a1, b1 = self.f.run_cmd("curl -F file=@%s %s:%s/api/v0/file/add" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10-F file=@%s %s:%s/api/v0/file/add" % (fname, ipfs_master_api_baseurl,
                                                                             ipfs_master_api_endpoint_port))
         logger.info(b1)
         cid = json.loads(b1)["Hash"]
@@ -79,7 +79,7 @@ class PinsCidRecover(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, "200")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_error_cid_post(self):
         cid = "Qm%s" % self.f.random_str(44)
 

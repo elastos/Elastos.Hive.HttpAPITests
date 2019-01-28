@@ -8,6 +8,7 @@ testPinsCidrRecover
 testPinsRecover
 testApiV0UidNew
 testApiV0UidLogin
+testApiV0UidInfo
 testApiV0PinAdd
 testApiV0PinLs
 testApiV0PinRm

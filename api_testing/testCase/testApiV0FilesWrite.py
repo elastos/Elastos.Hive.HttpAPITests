@@ -52,13 +52,13 @@ class ApiV0FilesWrite(unittest.TestCase):
         self.c = CaseMethod(api, {}, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_only_uid_get(self):
         # Create new uid
         uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
@@ -69,14 +69,14 @@ class ApiV0FilesWrite(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_err_uid_only_get(self):
         temp_api = api + "?uid=xxxxxxx"
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_uid_and_path_without_file_get(self):
         # Create new uid
         uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
@@ -87,7 +87,7 @@ class ApiV0FilesWrite(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_uid_path_and_file_get(self):
         # Create new uid
         uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
@@ -102,13 +102,13 @@ class ApiV0FilesWrite(unittest.TestCase):
 
         temp_api = "%s?create=true&path=/%s&uid=%s" % (api, fname, uid)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
                                                                       ipfs_master_api_port, temp_api))
         logger.info(a1)
         self.assertIn("200 OK", a1)
         os.remove(fname)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_other_arg_and_correct_value_get(self):
         cases = code_200_cases.split(",")
         for c_api in cases:
@@ -125,7 +125,7 @@ class ApiV0FilesWrite(unittest.TestCase):
 
             temp_api = "%s?create=true&path=/%s&uid=%s&%s" % (api, fname, uid, c_api)
 
-            a1, b1 = self.f.run_cmd("curl -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
+            a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
                                                                          ipfs_master_api_port, temp_api))
             logger.info(a1)
             self.assertIn("200 OK", a1)

@@ -52,13 +52,13 @@ class Peers(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body)
         unittest.TestCase.__init__(self, methodName)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_normal_get(self):
         code, bcheck = self.c.get_check()
         self.assertEqual(code, normal_response_code)
         self.assertEqual(bcheck, 0)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_verbose_get(self):
         verbose_cases_r = verbose_param_r.split(",")
         for verbose in verbose_cases_r:
@@ -72,7 +72,7 @@ class Peers(unittest.TestCase):
             self.assertEqual(code, normal_response_code)
             self.assertEqual(bcheck, 0)
 
-    @ConfigHttp.wrap_case
+    @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_200_cases_get(self):
         p_c = self.f.list_conf_case(peers_case)
         for p in p_c:

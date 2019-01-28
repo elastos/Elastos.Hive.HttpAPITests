@@ -51,27 +51,27 @@ class ApiV0PinRm(unittest.TestCase):
         self.c = CaseMethod(api, normal_response_body, "ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, internal_server_error)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_err_arg_get(self):
         temp_api = api + "?arg=xxxx"
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, internal_server_error)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_arg_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         with open("temp.txt", "w") as f:
             f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
@@ -80,14 +80,14 @@ class ApiV0PinRm(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, normal_response_code)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_unpin_arg_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         with open("temp.txt", "w") as f:
             f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
@@ -99,14 +99,14 @@ class ApiV0PinRm(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, internal_server_error)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_recursive_get(self):
         current = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         with open("temp.txt", "w") as f:
             f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
@@ -120,7 +120,7 @@ class ApiV0PinRm(unittest.TestCase):
             f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
@@ -134,7 +134,7 @@ class ApiV0PinRm(unittest.TestCase):
             f.write("[%s] [%s] [%s]." % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@temp.txt %s:%s/api/v0/add" % (ipfs_master_api_baseurl,
                                                                              ipfs_master_api_port))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]

@@ -40,13 +40,13 @@ class ApiV0FileAdd(unittest.TestCase):
         self.f = ConfigHttp("ipfs_master_api_endpoint_port")
         unittest.TestCase.__init__(self, methodName)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_no_arg_get(self):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api)
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_correct_arg_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -55,7 +55,7 @@ class ApiV0FileAdd(unittest.TestCase):
             f.write("This is file %s\n" % fname)
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         os.remove(fname)
 
@@ -65,17 +65,17 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_unexist_file_get(self):
         fname = "%s" % self.f.random_str()
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
 
         logger.info(a1)
         logger.info(b1)
         self.assertNotIn("200 OK", a1)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_recursive_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -84,7 +84,7 @@ class ApiV0FileAdd(unittest.TestCase):
             f.write("This is file %s\n" % fname)
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?recursive=1" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?recursive=1" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -92,7 +92,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?recursive=0" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?recursive=0" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -100,7 +100,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?recursive=xxx" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?recursive=xxx" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -108,7 +108,7 @@ class ApiV0FileAdd(unittest.TestCase):
 
         os.remove(fname)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_hidden_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -117,7 +117,7 @@ class ApiV0FileAdd(unittest.TestCase):
             f.write("This is file %s\n" % fname)
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?hidden=1" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?hidden=1" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -125,7 +125,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?hidden=0" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?hidden=0" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -133,7 +133,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?hidden=xxx" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?hidden=xxx" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -141,7 +141,7 @@ class ApiV0FileAdd(unittest.TestCase):
 
         os.remove(fname)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_pin_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -150,7 +150,7 @@ class ApiV0FileAdd(unittest.TestCase):
             f.write("This is file %s\n" % fname)
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?pin=1" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?pin=1" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -158,7 +158,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?pin=0" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?pin=0" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -166,7 +166,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?pin=xxx" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?pin=xxx" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -174,7 +174,7 @@ class ApiV0FileAdd(unittest.TestCase):
 
         os.remove(fname)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_err_arg_string_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -183,19 +183,19 @@ class ApiV0FileAdd(unittest.TestCase):
             f.write("This is file %s\n" % fname)
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?hidde=1" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?hidde=1" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
         self.assertIn("200 OK", a1)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?resur=0" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?resur=0" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
         self.assertIn("200 OK", a1)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?pinn=0" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?pinn=0" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -203,7 +203,7 @@ class ApiV0FileAdd(unittest.TestCase):
 
         os.remove(fname)
 
-    @Wrappers.wrap_case
+    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_joint_arg_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
@@ -212,7 +212,7 @@ class ApiV0FileAdd(unittest.TestCase):
             f.write("This is file %s\n" % fname)
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?hidden=1&recursive=1" % (fname, ipfs_master_api_baseurl,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?hidden=1&recursive=1" % (fname, ipfs_master_api_baseurl,
                                                                  ipfs_master_api_port, api))
         logger.info(a1)
         logger.info(b1)
@@ -220,7 +220,7 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl -v -F file=@%s %s:%s%s?hidden=1&recursive=1&pin=0" % (fname,
+        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?hidden=1&recursive=1&pin=0" % (fname,
                                                                                             ipfs_master_api_baseurl,
                                                                                             ipfs_master_api_port,
                                                                                             api))

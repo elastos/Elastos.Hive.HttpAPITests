@@ -300,7 +300,7 @@
    * - 5
      - Function: (1) Use old id mkdir /old_uid_mk and add a file. (2) Generate a new id and peerid. (3) Another node use the new peer id check the directory tree.
      - Operations successful. New peerid cannot get the directory tree.
-     - M
+     - A
 
 **TEST CASE: /api/v0/uid/login**
 
@@ -340,7 +340,7 @@
    * - 5
      - Function: (1) Create new id and peerid. (2) Create some directory and add some files. (3) GET/POST the api. can generate new id. (4) Use new id check the directory and file view tree on another node.
      - (1) Operation successful. (2) Operation successful. (3) Operation successful. New id should different from old id. (4) Can get the view tree.
-     - M
+     - A
 
 **TEST CASE: /api/v0/file/pin/add**
 
@@ -399,8 +399,7 @@
      - POST and GET with joint parameter. But some of parameter incorrect. Eg. recursive=1&hiddenxx=1
      - 200 code.
      - A
-   * - 10
-     - Function:
+
 
 **TEST CASE: /api/v0/file/pin/ls**
 

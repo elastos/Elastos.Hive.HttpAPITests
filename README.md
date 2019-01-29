@@ -7,47 +7,62 @@ HTTP.API Testing Framework
     
 # Framework Layout
 
-* :DIR: `config`
-    * :doc: `ipfs.conf` (A configuration file for ipfs cluster information)
+* `config`(This is a directory.)
+    * `ipfs.conf` (A configuration file for ipfs cluster information)
 
-* :DIR: `function`
-    * :doc: `ela_log.py` (Program for log functions.)
-    * :doc: `func.py` (Program for public functions.)
+* `function`(This is a directory.)
+    * `ela_log.py` (Program file for log functions.)
+    * `func.py` (Program file for public functions.)
     
-* :DIR: `testCases` (Program for each test case.)
+* `testCases` (This is a directory. It contains each test case file.)
 
-* :DIR: `result` (Contains log and report directory for each running.)
+* `result` (This is a directory. It contains log and report directory for each running.)
  
-* :DIR: `testFiles` (Config files for test cases and program.)
-    * :doc: `data.conf` (Test data for each test case.)
+* `testFiles` (This is a directory. It contains config files for test cases and program.)
+    * `data.conf` (A file contains test data for each test case.)
     
-* :doc: `http_api.py` (Framework start program)
-* :doc: `read_conf.py` (Function program for read config information)
-* :doc: `run_case_list.txt` (Text file for config which test cases should run.)
+* `http_api.py` (Framework start program file.)
+* `read_conf.py` (Function program file for read config information)
+* `run_case_list.txt` (Text file for config which test cases should run.)
 
 # Deployment Method
 
-* Setup python environment. For example: setup python27-64bit on windows 7 system.
-* Setup pip tools. https://pypi.org/project/pip/ 
-* Use pip tool setup some libraries.
+* Setup python2.7 environment on windows 7 system.
+    
+
+::
+    
+    (1) Download "Windows x86-64 MSI installer" from https://www.python.org/downloads/release/python-2713/    
+    (2) Double click and install the package and add environment variables(C:\Python27\;C:\Python27\Scripts) into os path.
+     
+* Some python setup package can integrate "pip" tool. If not you should download and setup pip tools.
+
+::
+    
+    On windows OS run "cmd" command run `pip` if return "Not internal or external commands or runnable programs" means you don not have the tool.
+    
+    Method 1: 
+        Use `easy_install` command, run `easy_install pip` 
+    Method 2: 
+        (1) Download "pip-19.0.1.tar.gz" from https://pypi.org/project/pip/#files .
+        (2) Decompression the tar.gz.
+        (3) Open `cmd` go into the pip directory, then run `python ez_setup`.
+    Method 3:
+        Downloading https://bootstrap.pypa.io/get-pip.py and running `python get-pip.py`
+     
+* Use pip tool setup some libraries. 
+    
+    Command such as : pip install <package-name>
+    
     ```shell
     $ pip install html-testrunner
     ```
 	
-    ```shell
-    $ pip install requests
-    ```
-	
-    ```shell
-    $ pip install html-testrunner
-    ```
-	
-    ```shell
-    $ pip install requests-toolbelt
-    ```
-* If you can not import HTMTTestRunner, can download HTMLTestRunner.py then put into directory such as python27/lib
+	Should install html-testrunner, requests, toolbelt.
+
+* If you can not import HTMTTestRunner, can download HTMLTestRunner.py (https://pypi.org/project/HTMLTestRunner/) then put into directory such as python27/lib
 * If you run this framework on windows OS, you should setup "curl" command. Download curl from https://curl.haxx.se/windows/
-* Config run_case_list.txt if the line start with "#", framework will not run the cases.
+* Config run_case_list.txt. If the line start with "#", framework will not run the cases.
 
 # How to config
 * Modify `run_case_list.txt`. Write all files name in it. The files name from directory `testCase`. If you don't want to some cases. Make the line start with "#".
@@ -88,7 +103,7 @@ HTTP.API Testing Framework
  ::
     
     ipfs_master_api_baseurl         =   http://10.10.88.88      # One ipfs-cluster node http-api address baseurl. 
-    ipfs_master_api_port	        =	9094                    # The node api port number.
+    ipfs_master_api_port	        =   9094                    # The node api port number.
     ipfs_master_api_endpoint_port   =   9095                    # The node api endpoint port.
     
     An example of http-api address: http://10.10.88.88:9094/version
@@ -101,11 +116,11 @@ HTTP.API Testing Framework
     In this document you can config test data for each http-api. Then each <testcase>.py file will use the testing data to do test. 
     For example:
     
-        [API_V0_UID_NEW]        # Branch name, use upper letters and "_".  /api/v0/uid/new => API_V0_UID_NEW
-        api = /api/v0/uid/new   # HTTP-API string
-        normal_response_body = {"UID":"uid-ab4132c5-68e7-4702-9ff4-70257f273800","PeerID":"Qmc7hqkNcZHDvLQCUmvj28oSgxf3Zvce97qPSCkYQTpYLu"}
-                                # Response body.
-        200_code_cases   =      # Some api strings for test.
+        [API_V0_UID_NEW]                                    # Branch name, use upper letters and "_".  /api/v0/uid/new => API_V0_UID_NEW
+        api = /api/v0/uid/new                               # HTTP-API string
+        normal_response_body = {"UID":"","PeerID":""}       # Response body.
+                                
+        other_parameters_cases   =                          # Some api strings for test.
                     XXX=1,
                     verbose=1&xxx=1,
                     xxx=xxx&verbose=0,

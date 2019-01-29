@@ -52,13 +52,15 @@ HTTP.API Testing Framework
      
 * Use pip tool setup some libraries. 
     
-    Command such as : pip install <package-name>
+    Command such as : pip install "package-name"
     
     ```shell
     $ pip install html-testrunner
+    $ pip install requests
+    $ pip install requests_toolbelt
     ```
 	
-	Should install html-testrunner, requests, toolbelt.
+	Should install html-testrunner, requests, requests_toolbelt.
 
 * If you can not import HTMTTestRunner, can download HTMLTestRunner.py (https://pypi.org/project/HTMLTestRunner/) then put into directory such as python27/lib
 * If you run this framework on windows OS, you should setup "curl" command. Download curl from https://curl.haxx.se/windows/

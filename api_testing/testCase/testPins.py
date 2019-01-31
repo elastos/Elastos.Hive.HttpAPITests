@@ -105,11 +105,10 @@ class Pins(unittest.TestCase):
             code, bcheck = self.c.get_check(quiet)
             self.assertEqual(code, normal_response_code)
 
-
     @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_joint_arguments_get(self):
         p_c = self.f.list_conf_case(pins_case)
         for p in p_c:
             code, bcheck = self.c.get_check(p)
-            self.assertEqual(code, normal_response_code)
+            self.assertEqual(code, "200")
 

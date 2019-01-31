@@ -19,8 +19,11 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeoout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api = b.get_api_v0_file_ls("api")
+api_add = b.get_api_v0_file_add("api")
 normal_response_body = b.get_api_v0_file_ls("normal_response_body")
 
 
@@ -82,8 +85,12 @@ class ApiV0FileLs(unittest.TestCase):
             f.write("[%s] [%s] [%s].\n" % (current, os.path.basename(__file__), sys._getframe().f_code.co_name))
         f.close()
 
-        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
-                                                                       ipfs_master_api_port))
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -F file=@%s \"%s:%s%s\"" % (curl_connect_timeout,
+                                                                                             curl_max_timeout,
+                                                                                             fname,
+                                                                                             ipfs_master_api_baseurl,
+                                                                                             ipfs_master_api_port,
+                                                                                             api_add))
         logger.info(b1)
         Hash = json.loads(b1)["Hash"]
         temp = "%s?arg=%s" % (api, Hash)

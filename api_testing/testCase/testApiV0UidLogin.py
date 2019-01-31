@@ -96,20 +96,20 @@ class ApiV0UidLogin(unittest.TestCase):
 
         # Check the uid's dir_tree
         api_ls = b.get_api_v0_files_ls("api")
-        temp_api = "%s?uid=%s" % (api_ls, uid)
+        temp_api = "%s?uid=%s&path=/%s" % (api_ls, uid, pname)
         a1, dir_tree1 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
 
         # Renew a uid
         api_temp = "%s?uid=%s" % (api, str(uid))
         a1, b1 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
         temp = json.loads(b1)
+        uid_old = temp["OldUID"]
         uid_new = temp["UID"]
-        logger.info(uid_new)
-
-        self.assertNotEqual(uid, uid_new)
+        self.assertNotEqual(uid_old, uid_new)
+        logger.info(b1)
 
         # Check the uid's dir_tree2
-        api_temp = "%s?uid=%s" % (api_ls, str(uid))
+        api_temp = "%s?uid=%s&path=/%s" % (api_ls, uid_new, pname)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
         logger.info(b1)
         self.assertEqual(b1, "200")

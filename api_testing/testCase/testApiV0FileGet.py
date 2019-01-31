@@ -19,8 +19,11 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeoout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api = b.get_api_v0_file_get("api")
+api_add = b.get_api_v0_file_add("api")
 
 
 class ApiV0FileGet(unittest.TestCase):
@@ -55,8 +58,12 @@ class ApiV0FileGet(unittest.TestCase):
         f.close()
 
         # Add the file.
-        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
-                                                                       ipfs_master_api_port))
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -F file=@%s \"%s:%s%s\"" % (curl_connect_timeout,
+                                                                                             curl_max_timeout,
+                                                                                             fname,
+                                                                                             ipfs_master_api_baseurl,
+                                                                                             ipfs_master_api_port,
+                                                                                             api_add))
         logger.info(b1)
 
         Hash = json.loads(b1)["Hash"]
@@ -94,8 +101,12 @@ class ApiV0FileGet(unittest.TestCase):
         f.close()
 
         # Add the file.
-        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
-                                                                       ipfs_master_api_port))
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -F file=@%s \"%s:%s%s\"" % (curl_connect_timeout,
+                                                                                             curl_max_timeout,
+                                                                                             fname,
+                                                                                             ipfs_master_api_baseurl,
+                                                                                             ipfs_master_api_port,
+                                                                                             api_add))
         logger.info(b1)
         os.remove(fname)
 
@@ -125,8 +136,12 @@ class ApiV0FileGet(unittest.TestCase):
         f.close()
 
         # Add the file.
-        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
-                                                                       ipfs_master_api_port))
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -F file=@%s \"%s:%s%s\"" % (curl_connect_timeout,
+                                                                                             curl_max_timeout,
+                                                                                             fname,
+                                                                                             ipfs_master_api_baseurl,
+                                                                                             ipfs_master_api_port,
+                                                                                             api_add))
         logger.info(b1)
         os.remove(fname)
 
@@ -149,4 +164,33 @@ class ApiV0FileGet(unittest.TestCase):
         temp_api = "%s?arg=%s&compression-level=10" % (api, Hash)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, "500")
+        self.assertEqual(b1, "200")
+
+    @Wrappers.wrap_case(os.path.basename(__file__))
+    def test_add_on_node1_get_on_node2_get(self):
+        # Create random file name.
+        fname = "%s" % self.f.random_str()
+        logger.info(fname)
+        with open(fname, "a") as f:
+            f.write("This is file %s\n" % fname)
+        f.close()
+
+        # Add the file.
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -F file=@%s \"%s:%s%s\"" % (curl_connect_timeout,
+                                                                                             curl_max_timeout,
+                                                                                             fname,
+                                                                                             ipfs_master_api_baseurl,
+                                                                                             ipfs_master_api_port,
+                                                                                             api_add))
+        logger.info(b1)
+        os.remove(fname)
+
+        Hash = json.loads(b1)["Hash"]
+        temp_api = "%s?arg=%s&compress=1&compression-level=1" % (api, Hash)
+
+        ipfs_slave_api_baseurl_1 = a.get_ipfs_cluster("ipfs_slave_api_baseurl_1")
+        ipfs_slave_api_endpoint_port_1 = a.get_ipfs_cluster("ipfs_slave_api_endpoint_port_1")
+
+        a1, b1 = self.f.curl_get_code(ipfs_slave_api_baseurl_1, ipfs_slave_api_endpoint_port_1, temp_api)
+        logger.info(b1)
+        self.assertEqual(b1, "200")

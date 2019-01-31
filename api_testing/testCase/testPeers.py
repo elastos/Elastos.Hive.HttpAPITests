@@ -79,11 +79,3 @@ class Peers(unittest.TestCase):
             code, bcheck = self.c.get_check(p)
             self.assertEqual(code, normal_response_code)
             self.assertEqual(bcheck, 0)
-
-
-# if __name__ == '__main__':
-#     suite = unittest.TestSuite()
-#     suite.addTest(Peers("test_200_cases_get"))
-#     runner = unittest.TextTestRunner()
-#     runner.run(suite)
-

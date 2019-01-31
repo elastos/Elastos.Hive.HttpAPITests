@@ -19,6 +19,8 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeoout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api = b.get_api_v0_file_cat("api")
 
@@ -55,8 +57,12 @@ class ApiV0FileCat(unittest.TestCase):
         f.close()
 
         # Add the file.
-        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -F file=@%s %s:%s/api/v0/add" % (fname, ipfs_master_api_baseurl,
-                                                                       ipfs_master_api_port))
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s\"" % (curl_connect_timeout,
+                                                                                                curl_max_timeout,
+                                                                                                fname,
+                                                                                                ipfs_master_api_baseurl,
+                                                                                                ipfs_master_api_port,
+                                                                                                api))
         logger.info(b1)
 
         Hash = json.loads(b1)["Hash"]
@@ -72,7 +78,6 @@ class ApiV0FileCat(unittest.TestCase):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, "500")
-
 
     @Wrappers.wrap_case(os.path.basename(__file__))
     def test_unexist_arg_get(self):

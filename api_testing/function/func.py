@@ -44,7 +44,7 @@ class Srequests:
 
 
 class ConfigHttp:
-    def __init__(self, portx = "ipfs_master_api_port"):
+    def __init__(self, portx="ipfs_master_api_port"):
         global host, port, timeout
         host = localReadConfig.get_ipfs_cluster("ipfs_master_api_baseurl")
         port = localReadConfig.get_ipfs_cluster(portx)
@@ -304,7 +304,7 @@ class CaseMethod:
                 res_dict = {}
         else:
             res_dict = res
-        expect_dict = json.loads(self.normal_response_body)
+        expect_dict = json.loads(self.normal_response_body, strict=False)
         res = self.f.check_body(res_dict, expect_dict)
         return code, res
 

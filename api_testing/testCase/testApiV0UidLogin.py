@@ -86,13 +86,6 @@ class ApiV0UidLogin(unittest.TestCase):
         uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
         logger.info(uid)
 
-        # Use the uid create a directory.
-        pname = self.f.random_str()
-        api_mkdir = b.get_api_v0_files_mkdir("api")
-        temp_api = "%s?path=/%s&uid=%s" % (api_mkdir, pname, uid)
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        logger.info(b1)
-        self.assertEqual(b1, "200")
 
         # Check the uid's dir_tree
         api_ls = b.get_api_v0_files_ls("api")

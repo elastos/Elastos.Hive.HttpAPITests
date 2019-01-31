@@ -66,6 +66,7 @@ HTTP.API Testing Framework
 * If you run this framework on windows OS, you should setup "curl" command. Download curl from https://curl.haxx.se/windows/
 * Config run_case_list.txt. If the line start with "#", framework will not run the cases.
 
+
 # How to config
 * Modify `run_case_list.txt`. Write all files name in it. The files name from directory `testCase`. If you don't want to some cases. Make the line start with "#".
 
@@ -105,7 +106,7 @@ HTTP.API Testing Framework
  ::
     
     ipfs_master_api_baseurl         =   http://10.10.88.88      # One ipfs-cluster node http-api address baseurl. 
-    ipfs_master_api_port	        =   9094                    # The node api port number.
+    ipfs_master_api_port	          =   9094                    # The node api port number.
     ipfs_master_api_endpoint_port   =   9095                    # The node api endpoint port.
     
     An example of http-api address: http://10.10.88.88:9094/version
@@ -118,11 +119,13 @@ HTTP.API Testing Framework
     In this document you can config test data for each http-api. Then each <testcase>.py file will use the testing data to do test. 
     For example:
     
+
         [API_V0_UID_NEW]                                    # Branch name, use upper letters and "_".  /api/v0/uid/new => API_V0_UID_NEW
         api = /api/v0/uid/new                               # HTTP-API string
         normal_response_body = {"UID":"","PeerID":""}       # Response body.
                                 
         other_parameters_cases   =                          # Some api strings for test.
+
                     XXX=1,
                     verbose=1&xxx=1,
                     xxx=xxx&verbose=0,

@@ -60,7 +60,7 @@ class ApiV0UidiNFO(unittest.TestCase):
         temp_api = api + "?uid=xxxx"
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, "200")
+        self.assertEqual(b1, "500")
 
     @Wrappers.wrap_case(os.path.basename(__file__))
     def test_correct_uid_value_get(self):

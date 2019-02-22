@@ -18,6 +18,8 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api = b.get_api_v0_uid_login("api")
 normal_response_body = b.get_api_v0_uid_login("normal_response_body")

@@ -103,15 +103,23 @@ class ConfigHttp:
             self.logger.error("Subprocess error!")
             return None
 
-    def get_interface(self, addr, aport, api):
-        self.logger.info("[GET API] curl  --connect-timeout 10 -m 10 \"%s:%s%s\"" % (addr, aport, api))
-        a1, b1 = self.run_cmd("curl --connect-timeout 10 -m 10 \"%s:%s%s\"" % (addr, aport, api))
+    def get_interface(self, addr, aport, api, ctimeout="10", rtimeout="10"):
+        self.logger.info("[GET API] curl  --connect-timeout %s -m %s \"%s:%s%s\"" % (ctimeout, rtimeout, addr, aport, api))
+        a1, b1 = self.run_cmd("curl --connect-timeout %s -m %s \"%s:%s%s\"" % (ctimeout, rtimeout, addr, aport, api))
         # self.logger.info("[GET API E] %s" % a1)
         self.logger.info("[GET API OUTPUT] %s" % b1)
         return a1, b1
 
     def get_new_id(self, addr, aport, api = "/api/v0/uid/new"):
         a, b = self.get_interface(addr, aport, api)
+        if b is not None:
+            uid = json.loads(b)["UID"]
+        else:
+            uid = None
+        return uid
+
+    def get_new_id2(self, addr, aport, ctimeout = "10", rtimeout = "10", api = "/api/v0/uid/new"):
+        a, b = self.get_interface(addr, aport, api, ctimeout, rtimeout)
         if b is not None:
             uid = json.loads(b)["UID"]
         else:
@@ -177,30 +185,30 @@ class ConfigHttp:
         res = cmp(res_body.keys(), expect_body.keys())
         return res
 
-    def curl_get_code(self, baseurl, port, api, timeout = '10'):
-        o, e = self.run_cmd("curl --connect-timeout %s -m 10 -o /dev/null -s -w %%{http_code} \"%s:%s%s\""
-                            % (timeout, baseurl, port, api))
+    def curl_get_code(self, baseurl, port, api, ctimeout = "60", rtimeout = "60"):
+        o, e = self.run_cmd("curl --connect-timeout %s -m %s -o /dev/null -s -w %%{http_code} \"%s:%s%s\""
+                            % (ctimeout, rtimeout, baseurl, port, api))
         return o, e
 
-    def curl_get_body(self, baseurl, port, api, timeout = '10'):
-        o, e = self.run_cmd("curl --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
+    def curl_get_body(self, baseurl, port, api, ctimeout = "60", rtimeout = "60"):
+        o, e = self.run_cmd("curl --connect-timeout " + ctimeout + " -m " + rtimeout + " " + baseurl + ":" + port + api)
         return (o,e)
 
-    def curl_post_code(self, baseurl, port, api, parm_str = "", timeout = '10'):
+    def curl_post_code(self, baseurl, port, api, parm_str = "", timeout = '60'):
         if parm_str == "":
-            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
+            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 60 -o /dev/null -s -w %{http_code} "\
                                  + baseurl + ":" + port + api)
         else:
-            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 -o /dev/null -s -w %{http_code} "\
+            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 60 -o /dev/null -s -w %{http_code} "\
                                  + baseurl + ":" + port + api + " -d %s" % parm_str)
         return (o, e)
 
-    def curl_post_body(self, baseurl, port, api, parm_str = "", timeout = '10'):
+    def curl_post_body(self, baseurl, port, api, parm_str = "", timeout = '60'):
         if parm_str != "":
-            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api + " -d %s" % parm_str)
+            o, e = self.run_cmd("curl -X POST --connect-timeout " + timeout + " -m 60 " + baseurl + ":" + port + api + " -d %s" % parm_str)
         else:
             o, e = self.run_cmd(
-                "curl -X POST --connect-timeout " + timeout + " -m 10 " + baseurl + ":" + port + api)
+                "curl -X POST --connect-timeout " + timeout + " -m 60 " + baseurl + ":" + port + api)
         return (o,e)
 
     def list_conf_case(self, case_str, sp = ","):

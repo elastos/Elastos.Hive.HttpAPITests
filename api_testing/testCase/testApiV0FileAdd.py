@@ -19,7 +19,7 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
-curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeoout")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeout")
 curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api = b.get_api_v0_file_add("api")
@@ -280,7 +280,7 @@ class ApiV0FileAdd(unittest.TestCase):
     def test_with_joint_arg_get(self):
         # Create random file name.
         fname = "%s" % self.f.random_str()
-        logger.info(fname)
+        logger.info("Create %s." % fname)
         with open(fname, "a") as f:
             f.write("This is file %s\n" % fname)
         f.close()

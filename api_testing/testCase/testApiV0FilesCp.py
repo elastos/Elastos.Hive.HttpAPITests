@@ -19,7 +19,7 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
-curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeoout")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeout")
 curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api = b.get_api_v0_files_cp("api")
@@ -81,7 +81,7 @@ class ApiV0FilesCp(unittest.TestCase):
         f.close()
 
         temp_api = "%s?create=true&path=/%s&uid=%s" % (write_api, fname, uid)
-        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s?pin=1\"" % (
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s&pin=1\"" % (
             curl_connect_timeout,
             curl_max_timeout,
             fname,
@@ -93,18 +93,31 @@ class ApiV0FilesCp(unittest.TestCase):
         self.assertIn("200 OK", a1)
         os.remove(fname)
 
-        # Create randon new path
+        # Create random new path
         npath = "/%s" % self.f.random_str()
-        temp_api = "%s?uid=%s" % (mkdir_api, npath)
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        logger.info(b1)
-        self.assertEqual(b1, "200")
+        temp_api = "%s?uid=%s&path=%s" % (mkdir_api, uid, npath)
+
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v \"%s:%s%s\"" % (
+            curl_connect_timeout,
+            curl_max_timeout,
+            ipfs_master_api_baseurl,
+            ipfs_master_api_port,
+            temp_api))
+
+        logger.info(a1)
+        self.assertIn("200 OK", a1)
 
         # cp
         temp_api = "%s?uid=%s&source=/&dest=%s" % (api, uid, npath)
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        logger.info(b1)
-        self.assertEqual(b1, "200")
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v \"%s:%s%s\"" % (
+            curl_connect_timeout,
+            curl_max_timeout,
+            ipfs_master_api_baseurl,
+            ipfs_master_api_port,
+            temp_api))
+
+        logger.info(a1)
+        self.assertIn("200 OK", a1)
 
     @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_err_source_get(self):
@@ -121,7 +134,7 @@ class ApiV0FilesCp(unittest.TestCase):
 
         temp_api = "%s?create=true&path=/%s&uid=%s" % (write_api, fname, uid)
 
-        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s?pin=1\"" % (
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s&pin=1\"" % (
             curl_connect_timeout,
             curl_max_timeout,
             fname,
@@ -161,7 +174,7 @@ class ApiV0FilesCp(unittest.TestCase):
 
         temp_api = "%s?create=true&path=/%s&uid=%s" % (write_api, fname, uid)
 
-        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s?pin=1\"" % (
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v -F file=@%s \"%s:%s%s&pin=1\"" % (
             curl_connect_timeout,
             curl_max_timeout,
             fname,

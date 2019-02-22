@@ -28,6 +28,8 @@ api = b.get_pins("api")
 a = read_conf.ReadConfig()
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 pins_case = b.get_pins("200_code_cases")
 
 
@@ -84,31 +86,40 @@ class Pins(unittest.TestCase):
     def test_with_verbose_get(self):
         verbose_cases_r = verbose_param_r.split(",")
         for verbose in verbose_cases_r:
-            code, bcheck = self.c.get_check(verbose)
-            self.assertEqual(code, normal_response_code)
+            temp_api = api + "?" + verbose
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api, curl_connect_timeout,
+                                          curl_max_timeout)
+            self.assertEqual(b1, "200")
 
         verbose_cases_e = verbose_param_e.split(",")
         for verbose in verbose_cases_e:
-            code, bcheck = self.c.get_check(verbose)
-            self.assertEqual(code, normal_response_code)
+            temp_api = api + "?" + verbose
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api, curl_connect_timeout,
+                                          curl_max_timeout)
+            self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_quiet_get(self):
         quiet_cases_r = quiet_param_r.split(",")
         for quiet in quiet_cases_r:
-            code, bcheck = self.c.get_check(quiet)
-            self.assertEqual(code, normal_response_code)
-
+            temp_api = api + "?" + quiet
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api, curl_connect_timeout,
+                                          curl_max_timeout)
+            self.assertEqual(b1, "200")
 
         quiet_cases_e = quiet_param_e.split(",")
         for quiet in quiet_cases_e:
-            code, bcheck = self.c.get_check(quiet)
-            self.assertEqual(code, normal_response_code)
+            temp_api = api + "?" + quiet
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api, curl_connect_timeout,
+                                          curl_max_timeout)
+            self.assertEqual(b1, "200")
 
     @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_joint_arguments_get(self):
         p_c = self.f.list_conf_case(pins_case)
         for p in p_c:
-            code, bcheck = self.c.get_check(p)
-            self.assertEqual(code, "200")
+            temp_api = api + "?" + p
+            a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api, curl_connect_timeout,
+                                          curl_max_timeout)
+            self.assertEqual(b1, "200")
 

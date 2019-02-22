@@ -19,6 +19,9 @@ b = read_conf.ReadData()
 
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_endpoint_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
+
 api = b.get_api_v0_name_publish("api")
 normal_response_body = b.get_api_v0_name_publish("normal_response_body")
 
@@ -76,7 +79,14 @@ class ApiV0NamePublish(unittest.TestCase):
         path_hash = self.f.get_files_path_hash(ipfs_master_api_baseurl, ipfs_master_api_port, path_name, uid)
 
         # Publish
-        temp_api = "%s/uid=%s&path=%s" % (api, uid, path_hash)
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        logger.info(b1)
-        self.assertEqual(b1, "200")
+        temp_api = "%s?uid=%s&path=%s" % (api, uid, path_hash)
+        a1, b1 = self.f.run_cmd("curl --connect-timeout %s -m %s -v \"%s:%s%s\"" % (
+            curl_connect_timeout,
+            curl_max_timeout,
+            ipfs_master_api_baseurl,
+            ipfs_master_api_port,
+            temp_api))
+
+        logger.info(a1)
+        self.assertIn("200 OK", a1)
+

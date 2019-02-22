@@ -570,6 +570,14 @@
      - POST and GET with joint parameter. But some of parameter incorrect.
      - 200 code.
      - A
+   * - 13
+     - Function: (1) Node 1 add a text file. (2) Cat the file on another node. (3) loop step 1 and 2 for other nodes.
+     - Successful.
+     - A
+   * - 14
+     - Function: Add 1000 files and all successful. Each file's content random.
+     - All successful and 200 code.
+     - A
 
 **TEST CASE: /api/v0/file/cat**
 
@@ -1350,6 +1358,10 @@
      - Generate a so large file on a node more 200G. Get the so large file from ipfs-cluster on another node.
      - Successful. Should not break off.
      - M
+   * - 7
+     - Add a file on node1, get the file on another node.
+     - Successful.
+     - A
 
 
 **TEST CASE: [PERF] /api/v0/file/ls**
@@ -1372,7 +1384,7 @@
      - Expect
      - Auto/Manual
    * - 1
-     - Makedir a directory, and generate 10000000 files in the directory.
+     - Makedir a directory, and generate 1000000 files in the directory.
      - Successful.
      - M
    * - 2

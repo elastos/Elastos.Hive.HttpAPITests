@@ -30,9 +30,11 @@ api = b.get_pins_recover("api")
 a = read_conf.ReadConfig()
 ipfs_master_api_baseurl = a.get_ipfs_cluster("ipfs_master_api_baseurl")
 ipfs_master_api_port = a.get_ipfs_cluster("ipfs_master_api_port")
+curl_connect_timeout = a.get_ipfs_cluster("curl_connect_timeout")
+curl_max_timeout = a.get_ipfs_cluster("curl_max_timeout")
 
 api_temp = b.get_pins_recover("api_temp")
-api_err= b.get_pins_recover("api_err")
+api_err = b.get_pins_recover("api_err")
 
 
 class PinsRecover(unittest.TestCase):
@@ -80,9 +82,15 @@ class PinsRecover(unittest.TestCase):
 
     @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_correct_argument_post(self):
-        cc = CaseMethod(api_temp, "{}")
-        code, bcheck = cc.post_check()
-        self.assertEqual(code, normal_response_code)
+        a1, b1 = self.f.run_cmd("curl -X POST --connect-timeout %s -m %s -v \"%s:%s%s\"" % (
+            curl_connect_timeout,
+            curl_max_timeout,
+            ipfs_master_api_baseurl,
+            ipfs_master_api_port,
+            api_temp))
+        logger.info(a1)
+        logger.info(b1)
+        self.assertIn("200 OK", a1)
 
     @ConfigHttp.wrap_case(os.path.basename(__file__))
     def test_with_incorrect_argument_post(self):

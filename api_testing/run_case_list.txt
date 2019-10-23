@@ -3,12 +3,9 @@ testId
 testPeers
 testPeersPid
 testPins
-testPinsCidSync
-testPinsCidrRecover
 testPinsRecover
 testApiV0UidNew
 testApiV0UidLogin
-testApiV0UidInfo
 testApiV0PinAdd
 testApiV0PinLs
 testApiV0PinRm
@@ -25,4 +22,3 @@ testApiV0FilesRead
 testApiV0FilesRm
 testApiV0FilesStat
 testApiV0FilesWrite
-testApiV0NamePublish

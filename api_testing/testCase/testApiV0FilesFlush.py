@@ -52,12 +52,6 @@ class ApiV0FilesFlush(unittest.TestCase):
         logger.info(b1)
         self.assertEqual(b1, "500")
 
-    @Wrappers.wrap_case(os.path.basename(__file__))
-    def test_with_err_uid_get(self):
-        temp = "%s?uid=suxx" % api
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp)
-        logger.info(b1)
-        self.assertEqual(b1, "500")
 
     @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_only_path_get(self):

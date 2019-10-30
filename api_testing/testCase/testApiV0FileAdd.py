@@ -166,12 +166,6 @@ class ApiV0FileAdd(unittest.TestCase):
         x = self.f.check_body(json.loads(b1), json.loads(normal_response_body))
         self.assertEqual(x, 0)
 
-        a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s %s:%s%s?pin=xxx" % (fname, ipfs_master_api_baseurl,
-                                                                 ipfs_master_api_port, api))
-        logger.info(a1)
-        logger.info(b1)
-        self.assertNotIn("200 OK", a1)
-
         os.remove(fname)
 
     @Wrappers.wrap_case(os.path.basename(__file__))

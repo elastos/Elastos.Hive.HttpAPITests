@@ -145,8 +145,3 @@ class ApiV0FileGet(unittest.TestCase):
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
         self.assertEqual(b1, "200")
-
-        temp_api = "%s?arg=%s&compression-level=10" % (api, Hash)
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        logger.info(b1)
-        self.assertEqual(b1, "500")

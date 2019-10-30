@@ -62,7 +62,7 @@ class ApiV0FilesRead(unittest.TestCase):
         temp_api = "%s?uid=%s" % (api, uid)
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
         logger.info(b1)
-        self.assertEqual(b1, "500")
+        self.assertEqual(b1, "200")
 
     @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_path_only_get(self):

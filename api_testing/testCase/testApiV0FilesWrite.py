@@ -108,26 +108,4 @@ class ApiV0FilesWrite(unittest.TestCase):
         self.assertIn("200 OK", a1)
         os.remove(fname)
 
-    @Wrappers.wrap_case(os.path.basename(__file__))
-    def test_with_other_arg_and_correct_value_get(self):
-        cases = code_200_cases.split(",")
-        for c_api in cases:
-            # Create new uid
-            uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
-            logger.info(uid)
-
-            # Create random file name.
-            fname = "%s" % self.f.random_str()
-            logger.info(fname)
-            with open(fname, "a") as f:
-                f.write("This is file %s\n" % fname)
-            f.close()
-
-            temp_api = "%s?create=true&path=/%s&uid=%s&%s" % (api, fname, uid, c_api)
-
-            a1, b1 = self.f.run_cmd("curl --connect-timeout 10 -m 10 -v -F file=@%s \"%s:%s%s\"" % (fname, ipfs_master_api_baseurl,
-                                                                         ipfs_master_api_port, temp_api))
-            logger.info(a1)
-            self.assertIn("200 OK", a1)
-            os.remove(fname)
 

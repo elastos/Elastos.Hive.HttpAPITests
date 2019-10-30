@@ -55,13 +55,6 @@ class ApiV0UidLogin(unittest.TestCase):
         self.assertEqual(b1, "500")
 
     @Wrappers.wrap_case(os.path.basename(__file__))
-    def test_with_err_uid_get(self):
-        api_temp = "%s?uid=xxxxx" % api
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
-        logger.info(b1)
-        self.assertEqual(b1, "500")
-
-    @Wrappers.wrap_case(os.path.basename(__file__))
     def test_with_err_arg_get(self):
         api_temp = "%s?xxxxx" % api
         a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
@@ -79,38 +72,4 @@ class ApiV0UidLogin(unittest.TestCase):
          a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
          logger.info(b1)
          self.assertEqual(b1, "200")
-
-    @Wrappers.wrap_case(os.path.basename(__file__))
-    def test_renew_uid_check_dir_tree_get(self):
-        # Create a new id
-        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
-        logger.info(uid)
-
-
-        # Check the uid's dir_tree
-        api_ls = b.get_api_v0_files_ls("api")
-        temp_api = "%s?uid=%s" % (api_ls, uid)
-        a1, dir_tree1 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-
-        # Renew a uid
-        api_temp = "%s?uid=%s" % (api, str(uid))
-        a1, b1 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
-        temp = json.loads(b1)
-        uid_new = temp["UID"]
-        logger.info(uid_new)
-
-        self.assertNotEqual(uid, uid_new)
-
-        # Check the uid's dir_tree2
-        api_temp = "%s?uid=%s" % (api_ls, str(uid))
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
-        logger.info(b1)
-        self.assertEqual(b1, "200")
-
-        a2, dir_tree2 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, api_temp)
-        logger.info(dir_tree2)
-
-        self.assertEqual(dir_tree1, dir_tree2)
-
-
 

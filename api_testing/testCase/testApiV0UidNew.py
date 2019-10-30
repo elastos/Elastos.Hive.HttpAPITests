@@ -64,38 +64,3 @@ class ApiV0UidNew(unittest.TestCase):
             logger.info(code)
             self.assertEqual(code, "200")
 
-    @Wrappers.wrap_case(os.path.basename(__file__))
-    def test_func_newid_check_oldid_dir_tree(self):
-        #Create a new id
-        uid = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
-        logger.info(uid)
-
-        #Check the uid's dir_tree
-        api_ls = b.get_api_v0_files_ls("api")
-        temp_api = "%s?uid=%s" % (api_ls, uid)
-        dir_tree = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-
-        #Use the uid create a directory.
-        pname = self.f.random_str()
-        api_mkdir = b.get_api_v0_files_mkdir("api")
-        temp_api = "%s?path=/%s&uid=%s" % (api_mkdir, pname, uid)
-        a1, b1 = self.f.curl_get_code(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        logger.info(b1)
-        self.assertEqual(b1, "200")
-
-        # Check the uid's dir_tree
-        temp_api = "%s?uid=%s" % (api_ls, uid)
-        dir_tree_2 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-
-        #Create a new id
-        uid2 = self.f.get_new_id(ipfs_master_api_baseurl, ipfs_master_api_port)
-        logger.info(uid2)
-
-        # Check the uid2's dir_tree
-        temp_api = "%s?uid=%s" % (api_ls, uid2)
-        dir_tree_3 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        self.assertEqual(dir_tree_3, dir_tree)
-
-        temp_api = "%s?uid=%s&path=/%s" % (api_ls, uid2, pname)
-        dir_tree_4 = self.f.curl_get_body(ipfs_master_api_baseurl, ipfs_master_api_port, temp_api)
-        self.assertEqual(dir_tree_4, dir_tree)
